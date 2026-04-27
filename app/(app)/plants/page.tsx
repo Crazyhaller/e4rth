@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import AddPlantModal from '@/features/plants/components/AddPlantModal'
 import Link from 'next/link'
-import UploadDropzone from '@/features/scan/components/UploadDropzone'
 
 type Plant = {
   id: string
@@ -76,12 +75,6 @@ export default function PlantsPage() {
           + Add Plant
         </button>
       </div>
-
-      <UploadDropzone
-        onResult={(data) => {
-          console.log('Scan result:', data)
-        }}
-      />
 
       {/* 🌱 EMPTY STATE */}
       {plants.length === 0 ? (
