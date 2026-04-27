@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import GrowthChart from '@/features/analytics/components/GrowthChart'
+import AddGrowthLogForm from '@/features/analytics/components/AddGrowthLogForm'
 
 type Plant = {
   id: string
@@ -22,6 +23,7 @@ export default function PlantDetailPage() {
   const [editing, setEditing] = useState(false)
   const [carePlan, setCarePlan] = useState<any>(null)
   const [loadingPlan, setLoadingPlan] = useState(false)
+  const [refreshLogs, setRefreshLogs] = useState(0)
 
   const [form, setForm] = useState({
     name: '',
@@ -328,9 +330,17 @@ export default function PlantDetailPage() {
           </AnimatedContainer>
         </div>
 
+        {/* Add Growth Log Form */}
+        <AnimatedContainer>
+          <AddGrowthLogForm
+            plantId={plant.id}
+            onSuccess={() => setRefreshLogs((prev) => prev + 1)}
+          />
+        </AnimatedContainer>
+
         {/* 📊 Row 2 → FULL WIDTH CHART */}
         <AnimatedContainer>
-          <GrowthChart plantId={plant.id} />
+          <GrowthChart plantId={plant.id} refreshKey={refreshLogs} />
         </AnimatedContainer>
       </div>
     </div>

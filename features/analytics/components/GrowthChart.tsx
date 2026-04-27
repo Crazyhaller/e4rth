@@ -24,20 +24,21 @@ ChartJS.register(
 
 interface Props {
   plantId: string
+  refreshKey?: number
 }
 
-export default function GrowthChart({ plantId }: Props) {
+export default function GrowthChart({ plantId, refreshKey }: Props) {
   const [logs, setLogs] = useState<any[]>([])
 
   useEffect(() => {
     const fetchLogs = async () => {
       const res = await fetch(`/api/logs/${plantId}`)
       const data = await res.json()
-      setLogs(data.reverse()) // oldest → newest
+      setLogs(data.reverse())
     }
 
     fetchLogs()
-  }, [plantId])
+  }, [plantId, refreshKey])
 
   if (logs.length === 0) {
     return <div className="text-sm text-foreground/60">No growth data yet.</div>
