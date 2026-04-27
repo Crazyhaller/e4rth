@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
+import GrowthChart from '@/features/analytics/components/GrowthChart'
 
 type Plant = {
   id: string
@@ -253,61 +254,83 @@ export default function PlantDetailPage() {
         </div>
       </AnimatedContainer>
 
-      {/* 🌱 Care Plan */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <AnimatedContainer className="lg:col-span-2">
-          <div className="glass rounded-2xl p-6 border border-white/10 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Care Plan</h3>
+      {/* 🌱 Features */}
 
-              <button
-                onClick={handleGeneratePlan}
-                className="px-3 py-1 text-xs rounded-xl bg-gradient-verdant text-white shadow-glow"
-              >
-                {loadingPlan
-                  ? 'Generating...'
-                  : carePlan
-                    ? 'Regenerate'
-                    : 'Generate'}
-              </button>
-            </div>
+      <div className="space-y-6">
+        {/* 🌿 Row 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 🌱 Care Plan */}
+          <AnimatedContainer className="lg:col-span-2">
+            <div className="glass rounded-2xl p-6 border border-white/10 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Care Plan</h3>
 
-            {!carePlan ? (
-              <p className="text-sm text-foreground/60">
-                No care plan yet. Generate one using AI.
-              </p>
-            ) : (
-              <div className="space-y-4 text-sm">
-                <div>
-                  <p className="text-foreground/60">Watering</p>
-                  <p className="font-medium">
-                    Every {carePlan.wateringFrequency} days
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-foreground/60">Sunlight</p>
-                  <p className="font-medium">{carePlan.sunlight}</p>
-                </div>
-
-                <div>
-                  <p className="text-foreground/60">Fertilizer</p>
-                  <p className="font-medium">{carePlan.fertilizer}</p>
-                </div>
-
-                <div>
-                  <p className="text-foreground/60">Notes</p>
-                  <p className="text-foreground/70">{carePlan.notes}</p>
-                </div>
+                <button
+                  onClick={handleGeneratePlan}
+                  className="px-3 py-1 text-xs rounded-xl bg-gradient-verdant text-white shadow-glow"
+                >
+                  {loadingPlan
+                    ? 'Generating...'
+                    : carePlan
+                      ? 'Regenerate'
+                      : 'Generate'}
+                </button>
               </div>
-            )}
-          </div>
-        </AnimatedContainer>
 
-        <AnimatedContainer delay={0.1}>
-          <div className="glass rounded-2xl p-6 border border-white/10 h-40 flex items-center justify-center text-foreground/60">
-            Alerts / Insights
-          </div>
+              {!carePlan ? (
+                <p className="text-sm text-foreground/60">
+                  No care plan yet. Generate one using AI.
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-foreground/60">Watering</p>
+                    <p className="font-medium">
+                      Every {carePlan.wateringFrequency} days
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-foreground/60">Sunlight</p>
+                    <p className="font-medium">{carePlan.sunlight}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-foreground/60">Fertilizer</p>
+                    <p className="font-medium">{carePlan.fertilizer}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-foreground/60">Notes</p>
+                    <p className="text-foreground/70">{carePlan.notes}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </AnimatedContainer>
+
+          {/* ⚠️ Alerts / Insights */}
+          <AnimatedContainer delay={0.05}>
+            <div className="glass rounded-2xl p-6 border border-white/10 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Insights</h3>
+
+                <p className="text-sm text-foreground/70">
+                  Your plant health looks stable. Consider tracking growth logs
+                  for better insights.
+                </p>
+              </div>
+
+              <p className="text-xs text-foreground/50 mt-4">
+                AI powered suggestion
+              </p>
+            </div>
+          </AnimatedContainer>
+        </div>
+
+        {/* 📊 Row 2 → FULL WIDTH CHART */}
+        <AnimatedContainer>
+          <GrowthChart plantId={plant.id} />
         </AnimatedContainer>
       </div>
     </div>

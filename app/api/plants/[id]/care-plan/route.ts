@@ -9,7 +9,7 @@ import { eq, and } from 'drizzle-orm'
  */
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const user = await getCurrentUser()
@@ -18,7 +18,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const plantId = params.id
+    const { id: plantId } = await params
 
     /**
      * 🌿 Verify plant ownership
