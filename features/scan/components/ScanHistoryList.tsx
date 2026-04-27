@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 
-export default function ScanHistoryList() {
+interface Props {
+  onSelect: (scan: any) => void
+}
+
+export default function ScanHistoryList({ onSelect }: Props) {
   const [history, setHistory] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -35,7 +39,10 @@ export default function ScanHistoryList() {
     <div className="space-y-3">
       {history.map((scan, i) => (
         <AnimatedContainer key={scan.id} delay={i * 0.05}>
-          <div className="glass rounded-xl p-4 border border-white/10">
+          <div
+            onClick={() => onSelect(scan)}
+            className="glass rounded-xl p-4 border border-white/10 cursor-pointer hover:shadow-glow transition"
+          >
             <p className="text-sm font-medium">
               {scan.disease === 'healthy' ? 'Healthy 🌱' : scan.disease}
             </p>
