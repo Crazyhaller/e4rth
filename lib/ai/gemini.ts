@@ -67,3 +67,67 @@ Rules:
     }
   }
 }
+
+/**
+ * Generate care plan for a plant
+ */
+export async function generateCarePlan({
+  plantName,
+  species,
+}: {
+  plantName: string
+  species?: string | null
+}) {
+  const prompt = `
+You are a plant care expert.
+
+Generate a care plan for the plant below.
+
+Plant Name: ${plantName}
+Species: ${species ?? 'Unknown'}
+
+Return STRICT JSON in this format:
+
+{
+  "wateringFrequency": number (days),
+  "sunlight": "description",
+  "fertilizer": "description",
+  "notes": "extra care tips"
+}
+
+Rules:
+- Watering frequency should be realistic (in days)
+- Keep sunlight and fertilizer concise
+- Notes should be practical and helpful
+- DO NOT return anything except JSON
+`
+
+  try {
+    // Accessed directly from the initialized client, just like analyzePlantImage
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: prompt,
+      config: {
+        // Enforce JSON output at the API level
+        responseMimeType: 'application/json',
+      },
+    })
+
+    // Use the property getter instead of the method
+    const text = response.text
+
+    if (!text) throw new Error('Empty response received from the model')
+
+    return JSON.parse(text)
+  } catch (err) {
+    // Log the actual error object rather than the parsed text string
+    console.error('Care plan parse error:', err)
+
+    return {
+      wateringFrequency: 3,
+      sunlight: 'Moderate indirect sunlight',
+      fertilizer: 'Use balanced fertilizer monthly',
+      notes: 'Unable to generate detailed plan',
+    }
+  }
+}
