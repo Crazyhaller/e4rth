@@ -1,13 +1,41 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UploadDropzone from '@/features/scan/components/UploadDropzone'
-import DiagnosisResultCard from '@/features/scan/components/DiagnosisResultCard'
 import ScanHistoryList from '@/features/scan/components/ScanHistoryList'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 
 export default function ScanPage() {
-  const [result, setResult] = useState<any>(null)
+  const [history, setHistory] = useState<any[]>([])
+  const [activeId, setActiveId] = useState<string | null>(null)
+
+  /* =========================
+     FETCH HISTORY
+  ========================= */
+  const fetchHistory = async () => {
+    try {
+      const res = await fetch('/api/scan/history')
+      const data = await res.json()
+      setHistory(data)
+    } catch (err) {
+      console.error('History fetch failed:', err)
+    }
+  }
+
+  useEffect(() => {
+    fetchHistory()
+  }, [])
+
+  /* =========================
+     NEW SCAN HANDLER
+  ========================= */
+  const handleNewScan = (scan: any) => {
+    // Add new scan at top
+    setHistory((prev) => [scan, ...prev])
+
+    // Open it immediately
+    setActiveId(scan.id)
+  }
 
   return (
     <div className="space-y-6">
@@ -22,16 +50,17 @@ export default function ScanPage() {
       </AnimatedContainer>
 
       {/* 📸 Upload */}
-      <UploadDropzone onResult={setResult} />
-
-      {/* 🧠 Result */}
-      {result && <DiagnosisResultCard data={result} />}
+      <UploadDropzone onResult={handleNewScan} />
 
       {/* 🌿 History */}
       <div>
         <h3 className="text-lg font-semibold mt-8 mb-3">Scan History</h3>
 
-        <ScanHistoryList onSelect={setResult} />
+        <ScanHistoryList
+          history={history}
+          activeId={activeId}
+          setActiveId={setActiveId}
+        />
       </div>
     </div>
   )
