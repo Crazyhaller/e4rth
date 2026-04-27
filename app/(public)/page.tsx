@@ -47,8 +47,8 @@ export default function HomePage() {
           <AnimatedContainer delay={0.2}>
             <p className="mt-6 text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto">
               Diagnose diseases, generate care plans, and track growth — all
-              powered by AI. VerdantAI turns plant care into a precise,
-              intelligent experience.
+              powered by AI. E4rth turns plant care into a precise, intelligent
+              experience.
             </p>
           </AnimatedContainer>
 
@@ -75,7 +75,7 @@ export default function HomePage() {
       {/* 🌿 FEATURES SECTION */}
       <SectionWrapper
         title="Everything Your Plants Need"
-        subtitle="From AI diagnosis to intelligent care plans and real-time insights — VerdantAI brings precision and simplicity together."
+        subtitle="From AI diagnosis to intelligent care plans and real-time insights — E4rth brings precision and simplicity together."
         centered
         className="pt-10"
       >
@@ -164,7 +164,7 @@ export default function HomePage() {
       {/* Testimonials */}
       <SectionWrapper
         title="Loved by Plant Enthusiasts"
-        subtitle="From beginners to experienced growers, VerdantAI helps people care for plants with confidence and precision."
+        subtitle="From beginners to experienced growers, E4rth helps people care for plants with confidence and precision."
         centered
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -238,8 +238,8 @@ export default function HomePage() {
 
             <AnimatedContainer delay={0.1}>
               <p className="mt-4 text-foreground/70 text-base md:text-lg">
-                Join thousands of plant lovers using VerdantAI to diagnose,
-                care, and grow with confidence.
+                Join thousands of plant lovers using E4rth to diagnose, care,
+                and grow with confidence.
               </p>
             </AnimatedContainer>
 
@@ -321,7 +321,7 @@ const testimonials = [
     name: 'Ananya Sharma',
     role: 'Urban Gardener',
     quote:
-      'VerdantAI completely changed how I care for my plants. The AI diagnosis is shockingly accurate.',
+      'E4rth completely changed how I care for my plants. The AI diagnosis is shockingly accurate.',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
   },
   {
