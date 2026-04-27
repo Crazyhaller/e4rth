@@ -19,6 +19,8 @@ export default function PlantDetailPage() {
   const [plant, setPlant] = useState<Plant | null>(null)
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
+  const [carePlan, setCarePlan] = useState<any>(null)
+  const [loadingPlan, setLoadingPlan] = useState(false)
 
   const [form, setForm] = useState({
     name: '',
@@ -27,11 +29,28 @@ export default function PlantDetailPage() {
     tags: '',
   })
 
+  // FETCH CARE PLAN
+  const fetchCarePlan = async () => {
+    try {
+      const res = await fetch(`/api/plants/${plantId}/care-plan`)
+      const data = await res.json()
+
+      if (!data.error) {
+        setCarePlan(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch care plan:', err)
+    }
+  }
+
+  // FETCH PLANT
   const fetchPlant = async () => {
     try {
       const res = await fetch(`/api/plants/${plantId}`)
       const data = await res.json()
       setPlant(data)
+
+      await fetchCarePlan()
 
       setForm({
         name: data.name || '',
@@ -43,6 +62,29 @@ export default function PlantDetailPage() {
       console.error('Fetch plant failed:', err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // GENERATE CARE PLAN
+  const handleGeneratePlan = async () => {
+    try {
+      setLoadingPlan(true)
+
+      const res = await fetch('/api/ai/care-plan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ plantId }),
+      })
+
+      const data = await res.json()
+
+      setCarePlan(data)
+    } catch (err) {
+      console.error('Generate plan failed:', err)
+    } finally {
+      setLoadingPlan(false)
     }
   }
 
@@ -211,11 +253,54 @@ export default function PlantDetailPage() {
         </div>
       </AnimatedContainer>
 
-      {/* 🌱 FUTURE SECTION PLACEHOLDERS */}
+      {/* 🌱 Care Plan */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <AnimatedContainer className="lg:col-span-2">
-          <div className="glass rounded-2xl p-6 border border-white/10 h-40 flex items-center justify-center text-foreground/60">
-            Care Plan (next)
+          <div className="glass rounded-2xl p-6 border border-white/10 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Care Plan</h3>
+
+              <button
+                onClick={handleGeneratePlan}
+                className="px-3 py-1 text-xs rounded-xl bg-gradient-verdant text-white shadow-glow"
+              >
+                {loadingPlan
+                  ? 'Generating...'
+                  : carePlan
+                    ? 'Regenerate'
+                    : 'Generate'}
+              </button>
+            </div>
+
+            {!carePlan ? (
+              <p className="text-sm text-foreground/60">
+                No care plan yet. Generate one using AI.
+              </p>
+            ) : (
+              <div className="space-y-4 text-sm">
+                <div>
+                  <p className="text-foreground/60">Watering</p>
+                  <p className="font-medium">
+                    Every {carePlan.wateringFrequency} days
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-foreground/60">Sunlight</p>
+                  <p className="font-medium">{carePlan.sunlight}</p>
+                </div>
+
+                <div>
+                  <p className="text-foreground/60">Fertilizer</p>
+                  <p className="font-medium">{carePlan.fertilizer}</p>
+                </div>
+
+                <div>
+                  <p className="text-foreground/60">Notes</p>
+                  <p className="text-foreground/70">{carePlan.notes}</p>
+                </div>
+              </div>
+            )}
           </div>
         </AnimatedContainer>
 
