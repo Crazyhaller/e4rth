@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { useUser } from '@clerk/nextjs'
 
 const navLinks = [
   { label: 'Features', href: '#features' },
@@ -16,6 +17,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { isSignedIn } = useUser()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,10 +62,10 @@ export default function Navbar() {
 
           {/* CTA */}
           <Link
-            href="/sign-in"
+            href={isSignedIn ? '/dashboard' : '/sign-in'}
             className="px-5 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow hover:opacity-90 transition"
           >
-            Get Started
+            {isSignedIn ? 'Dashboard' : 'Get Started'}
           </Link>
         </div>
 
@@ -96,10 +98,10 @@ export default function Navbar() {
             ))}
 
             <Link
-              href="/sign-in"
+              href={isSignedIn ? '/dashboard' : '/sign-in'}
               className="mt-2 px-5 py-2 rounded-xl bg-gradient-verdant text-white text-center shadow-glow"
             >
-              Get Started
+              {isSignedIn ? 'Dashboard' : 'Get Started'}
             </Link>
           </div>
         </motion.div>
