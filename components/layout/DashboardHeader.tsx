@@ -5,6 +5,7 @@ import { UserButton } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
+import NotificationBell from '@/features/notifications/components/NotificationBell'
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -30,18 +31,8 @@ export default function DashboardHeader() {
 
       {/* 🌱 Actions */}
       <div className="flex items-center gap-4">
-        {/* 🔔 Notifications (placeholder for now) */}
-        <button
-          className={cn(
-            'relative p-2 rounded-xl transition',
-            'hover:bg-white/10',
-          )}
-        >
-          <FontAwesomeIcon icon={faBell} className="text-sm" />
-
-          {/* Notification dot (we’ll make dynamic later) */}
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-verdant-500" />
-        </button>
+        {/* 🔔 Notifications */}
+        <NotificationBell />
 
         {/* 👤 User */}
         <div className="flex items-center">
