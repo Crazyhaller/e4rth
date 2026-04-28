@@ -92,6 +92,12 @@ export default function ChatPage() {
 
       const data = await res.json()
 
+      if (data.upgradeRequired) {
+        notify.error('Daily AI limit reached. Upgrade to Premium 🌿')
+
+        return
+      }
+
       setMessages((prev) => [
         ...prev,
         {

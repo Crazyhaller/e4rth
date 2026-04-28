@@ -38,6 +38,12 @@ export default function UploadDropzone({ onResult }: Props) {
 
       const data = await res.json()
 
+      if (data.upgradeRequired) {
+        notify.error('Daily AI limit reached. Upgrade to Premium 🌿')
+
+        return
+      }
+
       onResult(data)
       notify.success('Plant scan completed 🌿')
     } catch (err) {

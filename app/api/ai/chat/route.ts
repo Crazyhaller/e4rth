@@ -4,6 +4,7 @@ import { plants, chats } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { eq } from 'drizzle-orm'
 import { GoogleGenAI } from '@google/genai'
+import { checkAiUsage } from '@/lib/usage/checkAiUsage'
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
 
@@ -16,6 +17,21 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    /**
+     * 💬 Usage limits
+     */
+    const usage = await checkAiUsage(user.id)
+
+    if (!usage.allowed) {
+      return NextResponse.json(
+        {
+          error: usage.reason,
+          upgradeRequired: true,
+        },
+        { status: 403 },
+      )
     }
 
     const body = await req.json()
