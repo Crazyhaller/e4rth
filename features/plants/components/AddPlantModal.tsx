@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { notify } from '@/lib/toast'
 
 interface Props {
   open: boolean
@@ -50,8 +51,10 @@ export default function AddPlantModal({ open, onClose, onSuccess }: Props) {
         location: '',
         tags: '',
       })
+      notify.success('Plant added successfully 🌱')
     } catch (err) {
       console.error('Failed to create plant:', err)
+      notify.error('Failed to add plant.')
     } finally {
       setLoading(false)
     }

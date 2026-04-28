@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import GrowthChart from '@/features/analytics/components/GrowthChart'
 import AddGrowthLogForm from '@/features/analytics/components/AddGrowthLogForm'
+import { notify } from '@/lib/toast'
 
 type Plant = {
   id: string
@@ -84,8 +85,10 @@ export default function PlantDetailPage() {
       const data = await res.json()
 
       setCarePlan(data)
+      notify.success('Care plan generated 🌱')
     } catch (err) {
       console.error('Generate plan failed:', err)
+      notify.error('Failed to generate care plan.')
     } finally {
       setLoadingPlan(false)
     }
@@ -118,8 +121,10 @@ export default function PlantDetailPage() {
 
       setEditing(false)
       fetchPlant()
+      notify.success('Plant updated')
     } catch (err) {
       console.error('Update failed:', err)
+      notify.error('Failed to update plant.')
     }
   }
 
@@ -136,9 +141,11 @@ export default function PlantDetailPage() {
         method: 'DELETE',
       })
 
+      notify.success('Plant deleted')
       router.push('/plants')
     } catch (err) {
       console.error('Delete failed:', err)
+      notify.error('Failed to delete plant.')
     }
   }
 

@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+import { notify } from '@/lib/toast'
 
 interface Props {
   onResult: (data: any) => void
@@ -38,8 +39,10 @@ export default function UploadDropzone({ onResult }: Props) {
       const data = await res.json()
 
       onResult(data)
+      notify.success('Plant scan completed 🌿')
     } catch (err) {
       console.error('Scan failed:', err)
+      notify.error('Failed to analyze plant.')
     } finally {
       setLoading(false)
     }
