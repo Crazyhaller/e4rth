@@ -11,12 +11,7 @@ interface Message {
 }
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      message: 'Hello 🌿 I’m E4rth. Ask me anything about your plants.',
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
 
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -31,6 +26,39 @@ export default function ChatPage() {
       behavior: 'smooth',
     })
   }, [messages])
+
+  /* =========================
+   LOAD CHAT HISTORY
+========================= */
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const res = await fetch('/api/ai/chat/history')
+
+        const data = await res.json()
+
+        if (Array.isArray(data) && data.length > 0) {
+          setMessages(
+            data.map((msg: any) => ({
+              role: msg.role,
+              message: msg.message,
+            })),
+          )
+        } else {
+          setMessages([
+            {
+              role: 'assistant',
+              message: 'Hello 🌿 I’m E4rth. Ask me anything about your plants.',
+            },
+          ])
+        }
+      } catch (err) {
+        console.error('Failed to load chat history:', err)
+      }
+    }
+
+    fetchHistory()
+  }, [])
 
   /* =========================
      SEND MESSAGE
