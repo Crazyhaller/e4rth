@@ -28,7 +28,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-4">
               <FontAwesomeIcon
                 icon={faLeaf}
-                className="text-verdant-500 text-xl"
+                className="text-e4rth-500 text-xl"
               />
               <span className="text-lg font-semibold">E4rth</span>
             </div>

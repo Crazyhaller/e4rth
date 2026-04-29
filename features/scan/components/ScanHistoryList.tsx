@@ -2,9 +2,10 @@
 
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import DiagnosisResultCard from './DiagnosisResultCard'
+import { Scan } from '@/types/scan'
 
 interface Props {
-  history: any[]
+  history: Scan[]
   activeId: string | null
   setActiveId: (id: string | null) => void
 }
@@ -47,7 +48,12 @@ export default function ScanHistoryList({
               {/* 🧠 Inline Result */}
               {isActive && (
                 <div className="pl-2">
-                  <DiagnosisResultCard data={scan} />
+                  <DiagnosisResultCard
+                    data={{
+                      ...scan,
+                      severity: scan.severity as 'low' | 'medium' | 'high',
+                    }}
+                  />
                 </div>
               )}
             </div>

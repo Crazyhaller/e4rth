@@ -13,6 +13,7 @@ import {
   Legend,
   Filler,
 } from 'chart.js'
+import { GrowthLog } from '@/types/plant'
 
 ChartJS.register(
   LineElement,
@@ -30,8 +31,7 @@ interface Props {
 }
 
 export default function GrowthChart({ plantId, refreshKey }: Props) {
-  const [logs, setLogs] = useState<any[]>([])
-
+  const [logs, setLogs] = useState<GrowthLog[]>([])
   useEffect(() => {
     const fetchLogs = async () => {
       const res = await fetch(`/api/logs/${plantId}`)
@@ -55,7 +55,7 @@ export default function GrowthChart({ plantId, refreshKey }: Props) {
   const getCSSVar = (name: string) =>
     getComputedStyle(document.documentElement).getPropertyValue(name).trim()
 
-  const verdant = getCSSVar('--color-verdant-500')
+  const e4rth = getCSSVar('--color-e4rth-500')
   const moss = getCSSVar('--color-moss')
 
   const data = {
@@ -64,7 +64,7 @@ export default function GrowthChart({ plantId, refreshKey }: Props) {
       {
         label: 'Height (cm)',
         data: logs.map((l) => l.height),
-        borderColor: verdant,
+        borderColor: e4rth,
         backgroundColor: 'rgba(63,174,104,0.15)',
         tension: 0.4,
         fill: true,

@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { scans } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { eq, desc } from 'drizzle-orm'
+import { getUserScans } from '@/server/repositories/scan.repo'
 
 /**
  * GET /api/scan/history
@@ -15,10 +13,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const history = await db.query.scans.findMany({
-      where: eq(scans.userId, user.id),
-      orderBy: [desc(scans.createdAt)],
-    })
+    const history = await getUserScans(user.id)
 
     return NextResponse.json(history, { status: 200 })
   } catch (error) {

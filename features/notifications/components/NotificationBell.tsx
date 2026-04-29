@@ -104,7 +104,7 @@ export default function NotificationBell() {
         <FontAwesomeIcon icon={faBell} className="text-lg" />
 
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-verdant-500 text-white text-[10px] flex items-center justify-center shadow-glow">
+          <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-e4rth-500 text-white text-[10px] flex items-center justify-center shadow-glow">
             {unreadCount}
           </span>
         )}
@@ -156,7 +156,7 @@ export default function NotificationBell() {
                     className={`rounded-xl p-3 border transition ${
                       notification.isRead
                         ? 'bg-white/5 border-white/5'
-                        : 'bg-verdant-500/10 border-verdant-500/20'
+                        : 'bg-e4rth-500/10 border-e4rth-500/20'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -171,7 +171,7 @@ export default function NotificationBell() {
                       </div>
 
                       {!notification.isRead && (
-                        <span className="w-2 h-2 rounded-full bg-verdant-400 mt-1.5" />
+                        <span className="w-2 h-2 rounded-full bg-e4rth-400 mt-1.5" />
                       )}
                     </div>
 

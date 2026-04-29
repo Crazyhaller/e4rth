@@ -6,14 +6,7 @@ import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import GrowthChart from '@/features/analytics/components/GrowthChart'
 import AddGrowthLogForm from '@/features/analytics/components/AddGrowthLogForm'
 import { notify } from '@/lib/toast'
-
-type Plant = {
-  id: string
-  name: string
-  species?: string | null
-  location?: string | null
-  tags?: string[] | null
-}
+import { CarePlan, Plant } from '@/types/plant'
 
 export default function PlantDetailPage() {
   const { plantId } = useParams()
@@ -22,7 +15,7 @@ export default function PlantDetailPage() {
   const [plant, setPlant] = useState<Plant | null>(null)
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
-  const [carePlan, setCarePlan] = useState<any>(null)
+  const [carePlan, setCarePlan] = useState<CarePlan | null>(null)
   const [loadingPlan, setLoadingPlan] = useState(false)
   const [refreshLogs, setRefreshLogs] = useState(0)
 
@@ -184,7 +177,7 @@ export default function PlantDetailPage() {
                   {plant.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs px-2 py-1 rounded-full bg-verdant-500/10 text-verdant-400"
+                      className="text-xs px-2 py-1 rounded-full bg-e4rth-500/10 text-e4rth-400"
                     >
                       {tag}
                     </span>
@@ -246,7 +239,7 @@ export default function PlantDetailPage() {
               <div className="flex gap-3 mt-4">
                 <button
                   onClick={handleUpdate}
-                  className="px-4 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow"
+                  className="px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
                 >
                   Save
                 </button>
@@ -276,7 +269,7 @@ export default function PlantDetailPage() {
 
                 <button
                   onClick={handleGeneratePlan}
-                  className="px-3 py-1 text-xs rounded-xl bg-gradient-verdant text-white shadow-glow"
+                  className="px-3 py-1 text-xs rounded-xl bg-gradient-e4rth text-white shadow-glow"
                 >
                   {loadingPlan
                     ? 'Generating...'

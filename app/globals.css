@@ -8,16 +8,16 @@
    ========================================= */
 @theme {
   /* 🌿 Primary Botanical Palette */
-  --color-verdant-50: #f3faf5;
-  --color-verdant-100: #e6f5ea;
-  --color-verdant-200: #ccebd6;
-  --color-verdant-300: #99d7ad;
-  --color-verdant-400: #66c384;
-  --color-verdant-500: #3fae68;
-  --color-verdant-600: #2f8a52;
-  --color-verdant-700: #22643c;
-  --color-verdant-800: #163f26;
-  --color-verdant-900: #0b2315;
+  --color-e4rth-50: #f3faf5;
+  --color-e4rth-100: #e6f5ea;
+  --color-e4rth-200: #ccebd6;
+  --color-e4rth-300: #99d7ad;
+  --color-e4rth-400: #66c384;
+  --color-e4rth-500: #3fae68;
+  --color-e4rth-600: #2f8a52;
+  --color-e4rth-700: #22643c;
+  --color-e4rth-800: #163f26;
+  --color-e4rth-900: #0b2315;
 
   /* 🌱 Accent tones */
   --color-moss: #6b8f71;
@@ -51,7 +51,7 @@
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.25);
 
   /* Background Images */
-  --background-image-gradient-verdant: linear-gradient(
+  --background-image-gradient-e4rth: linear-gradient(
     135deg,
     #3fae68 0%,
     #1b4332 100%

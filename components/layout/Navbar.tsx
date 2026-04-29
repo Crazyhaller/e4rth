@@ -44,7 +44,7 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-2 hover:scale-105 transition-transform"
         >
-          <FontAwesomeIcon icon={faLeaf} className="text-verdant-500 text-xl" />
+          <FontAwesomeIcon icon={faLeaf} className="text-e4rth-500 text-xl" />
           <span className="font-semibold text-lg tracking-tight">E4rth</span>
         </Link>
 
@@ -63,7 +63,7 @@ export default function Navbar() {
           {/* CTA */}
           <Link
             href={isSignedIn ? '/dashboard' : '/sign-in'}
-            className="px-5 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow hover:opacity-90 transition"
+            className="px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow hover:opacity-90 transition"
           >
             {isSignedIn ? 'Dashboard' : 'Get Started'}
           </Link>
@@ -99,7 +99,7 @@ export default function Navbar() {
 
             <Link
               href={isSignedIn ? '/dashboard' : '/sign-in'}
-              className="mt-2 px-5 py-2 rounded-xl bg-gradient-verdant text-white text-center shadow-glow"
+              className="mt-2 px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-center shadow-glow"
             >
               {isSignedIn ? 'Dashboard' : 'Get Started'}
             </Link>

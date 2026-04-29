@@ -80,7 +80,7 @@ export default function UploadDropzone({ onResult }: Props) {
       <button
         onClick={handleUpload}
         disabled={!image || loading}
-        className="px-5 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow"
+        className="px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
       >
         {loading ? 'Analyzing...' : 'Analyze Plant'}
       </button>

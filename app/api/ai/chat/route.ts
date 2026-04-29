@@ -5,6 +5,7 @@ import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { eq } from 'drizzle-orm'
 import { GoogleGenAI } from '@google/genai'
 import { checkAiUsage } from '@/lib/usage/checkAiUsage'
+import { getUserPlants } from '@/server/repositories/plant.repo'
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
 
@@ -44,9 +45,7 @@ export async function POST(req: Request) {
     /**
      * 🌿 User plants context
      */
-    const userPlants = await db.query.plants.findMany({
-      where: eq(plants.userId, user.id),
-    })
+    const userPlants = await getUserPlants(user.id)
 
     const context = userPlants
       .map((p) => `Plant: ${p.name}, Species: ${p.species}`)

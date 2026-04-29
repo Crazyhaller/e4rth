@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { plants } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { eq, desc } from 'drizzle-orm'
+import { getUserPlants } from '@/server/repositories/plant.repo'
 
 /**
  * GET /api/plants
@@ -15,10 +16,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const userPlants = await db.query.plants.findMany({
-      where: eq(plants.userId, user.id),
-      orderBy: [desc(plants.createdAt)],
-    })
+    const userPlants = await getUserPlants(user.id)
 
     return NextResponse.json(userPlants, { status: 200 })
   } catch (error) {

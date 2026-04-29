@@ -38,7 +38,7 @@ export default function DiagnosisResultCard({ data }: Props) {
 
           <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden">
             <div
-              className="h-full bg-gradient-verdant transition-all"
+              className="h-full bg-gradient-e4rth transition-all"
               style={{ width: `${confidence}%` }}
             />
           </div>

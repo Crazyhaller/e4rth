@@ -70,7 +70,7 @@ export default function PlantsPage() {
 
         <button
           onClick={() => setOpenModal(true)}
-          className="px-5 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow hover:opacity-90 transition"
+          className="px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow hover:opacity-90 transition"
         >
           + Add Plant
         </button>
@@ -87,7 +87,7 @@ export default function PlantsPage() {
 
             <button
               onClick={() => setOpenModal(true)}
-              className="mt-6 px-5 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow"
+              className="mt-6 px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
             >
               Add Your First Plant
             </button>
@@ -121,7 +121,7 @@ export default function PlantsPage() {
                     {plant.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs px-2 py-1 rounded-full bg-verdant-500/10 text-verdant-400"
+                        className="text-xs px-2 py-1 rounded-full bg-e4rth-500/10 text-e4rth-400"
                       >
                         {tag}
                       </span>

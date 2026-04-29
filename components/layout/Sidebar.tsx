@@ -60,7 +60,7 @@ export default function Sidebar() {
       <div className="flex flex-col h-full p-4">
         {/* 🌿 Logo */}
         <Link href="/" className="flex items-center gap-2 px-3 py-2 mb-6">
-          <FontAwesomeIcon icon={faLeaf} className="text-verdant-500 text-xl" />
+          <FontAwesomeIcon icon={faLeaf} className="text-e4rth-500 text-xl" />
           <span className="text-lg font-semibold">E4rth</span>
         </Link>
 
@@ -76,7 +76,7 @@ export default function Sidebar() {
                 className={cn(
                   'flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all',
                   isActive
-                    ? 'bg-verdant-500/20 text-verdant-400 border border-verdant-500/30'
+                    ? 'bg-e4rth-500/20 text-e4rth-400 border border-e4rth-500/30'
                     : 'text-foreground/70 hover:bg-white/5 hover:text-foreground',
                 )}
               >

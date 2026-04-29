@@ -31,7 +31,7 @@ export default function DashboardPage() {
             <div className="glass rounded-2xl p-5 border border-white/10 hover:shadow-glow transition">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-foreground/60">{stat.label}</span>
-                <span className="text-verdant-400 text-lg">{stat.icon}</span>
+                <span className="text-e4rth-400 text-lg">{stat.icon}</span>
               </div>
 
               <p className="text-2xl font-semibold mt-3">{stat.value}</p>
@@ -55,7 +55,7 @@ export default function DashboardPage() {
                   key={activity.id}
                   className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition"
                 >
-                  <div className="text-verdant-400 mt-1">{activity.icon}</div>
+                  <div className="text-e4rth-400 mt-1">{activity.icon}</div>
 
                   <div>
                     <p className="text-sm font-medium">{activity.title}</p>

@@ -92,7 +92,7 @@ export default function AddGrowthLogForm({ plantId, onSuccess }: Props) {
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full px-4 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow"
+        className="w-full px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
       >
         {loading ? 'Saving...' : 'Add Log'}
       </button>

@@ -118,7 +118,7 @@ export default function AddPlantModal({ open, onClose, onSuccess }: Props) {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="px-4 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow"
+                className="px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
               >
                 {loading ? 'Adding...' : 'Add Plant'}
               </button>

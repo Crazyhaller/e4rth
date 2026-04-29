@@ -4,14 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import { notify } from '@/lib/toast'
 import ReactMarkdown from 'react-markdown'
-
-interface Message {
-  role: 'user' | 'assistant'
-  message: string
-}
+import { ChatMessage } from '@/types/ai'
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
 
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -39,7 +35,7 @@ export default function ChatPage() {
 
         if (Array.isArray(data) && data.length > 0) {
           setMessages(
-            data.map((msg: any) => ({
+            data.map((msg: ChatMessage) => ({
               role: msg.role,
               message: msg.message,
             })),
@@ -134,7 +130,7 @@ export default function ChatPage() {
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                 msg.role === 'user'
-                  ? 'ml-auto bg-gradient-verdant text-white shadow-glow'
+                  ? 'ml-auto bg-gradient-e4rth text-white shadow-glow'
                   : 'glass border border-white/10'
               }`}
             >
@@ -155,7 +151,7 @@ export default function ChatPage() {
                       ),
 
                       h3: ({ children }) => (
-                        <h3 className="text-base font-semibold mt-3 mb-2 text-verdant-500">
+                        <h3 className="text-base font-semibold mt-3 mb-2 text-e4rth-500">
                           {children}
                         </h3>
                       ),
@@ -179,7 +175,7 @@ export default function ChatPage() {
                       ),
 
                       em: ({ children }) => (
-                        <em className="italic text-verdant-500">{children}</em>
+                        <em className="italic text-e4rth-500">{children}</em>
                       ),
                     }}
                   >
@@ -221,7 +217,7 @@ export default function ChatPage() {
           <button
             onClick={handleSend}
             disabled={loading}
-            className="px-4 py-2 rounded-xl bg-gradient-verdant text-white text-sm shadow-glow"
+            className="px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
           >
             Send
           </button>

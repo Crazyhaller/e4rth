@@ -25,7 +25,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-ambient opacity-60 pointer-events-none" />
 
         <motion.div
-          className="absolute w-125 h-125 rounded-full blur-3xl opacity-30 bg-gradient-verdant"
+          className="absolute w-125 h-125 rounded-full blur-3xl opacity-30 bg-gradient-e4rth"
           animate={{ y: [0, -30, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -56,7 +56,7 @@ export default function HomePage() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/sign-up"
-                className="px-8 py-3 rounded-2xl bg-gradient-verdant text-white font-medium shadow-glow hover:opacity-90 transition"
+                className="px-8 py-3 rounded-2xl bg-gradient-e4rth text-white font-medium shadow-glow hover:opacity-90 transition"
               >
                 Start for Free
               </Link>
@@ -87,7 +87,7 @@ export default function HomePage() {
             <AnimatedContainer key={feature.title} delay={index * 0.1}>
               <div className="group p-6 rounded-2xl glass border border-white/10 hover:border-primary/40 transition-all hover:shadow-glow">
                 {/* Icon */}
-                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-verdant-500/10 text-verdant-500 mb-4 text-xl">
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-e4rth-500/10 text-e4rth-500 mb-4 text-xl">
                   {feature.icon}
                 </div>
 
@@ -172,7 +172,7 @@ export default function HomePage() {
             <AnimatedContainer key={t.name} delay={i * 0.1}>
               <div className="glass rounded-2xl p-6 border border-white/10 hover:border-primary/40 transition-all hover:shadow-glow">
                 {/* ⭐ Rating */}
-                <div className="flex gap-1 text-verdant-400 mb-3">
+                <div className="flex gap-1 text-e4rth-400 mb-3">
                   {Array.from({ length: 5 }).map((_, idx) => (
                     <FontAwesomeIcon key={idx} icon={faStar} />
                   ))}
@@ -223,7 +223,7 @@ export default function HomePage() {
 
           {/* 🌫️ Floating Orb */}
           <motion.div
-            className="absolute w-100 h-100 rounded-full blur-3xl opacity-30 bg-gradient-verdant"
+            className="absolute w-100 h-100 rounded-full blur-3xl opacity-30 bg-gradient-e4rth"
             animate={{ y: [0, -20, 0] }}
             transition={{ duration: 7, repeat: Infinity }}
           />
@@ -247,7 +247,7 @@ export default function HomePage() {
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   href="/sign-up"
-                  className="px-8 py-3 rounded-2xl bg-gradient-verdant text-white font-medium shadow-glow hover:opacity-90 transition"
+                  className="px-8 py-3 rounded-2xl bg-gradient-e4rth text-white font-medium shadow-glow hover:opacity-90 transition"
                 >
                   Start Free Today
                 </Link>
