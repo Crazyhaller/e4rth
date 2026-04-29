@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { getUserScans } from '@/server/repositories/scan.repo'
+import { getScanHistoryService } from '@/server/services/scan.service'
 
 /**
  * GET /api/scan/history
@@ -13,7 +13,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const history = await getUserScans(user.id)
+    const history = await getScanHistoryService(user.id)
 
     return NextResponse.json(history, { status: 200 })
   } catch (error) {

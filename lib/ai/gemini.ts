@@ -6,11 +6,9 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
 /**
  * Analyze plant image
  */
-export async function analyzePlantImage(base64Image: string) {
+export async function analyzePlantImage(imageUrl: string) {
   // Safely extract base64 data (handles cases where the prefix might be missing)
-  const base64Data = base64Image.includes(',')
-    ? base64Image.split(',')[1]
-    : base64Image
+  const base64Data = imageUrl.includes(',') ? imageUrl.split(',')[1] : imageUrl
 
   const prompt = `
 You are a plant disease detection AI.
