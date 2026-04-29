@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { notifications } from '@/lib/db/schema'
+
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { eq, desc } from 'drizzle-orm'
+
+import { getNotificationsService } from '@/server/services/notification.service'
 
 /**
  * GET /api/notifications
@@ -15,10 +15,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const data = await db.query.notifications.findMany({
-      where: eq(notifications.userId, user.id),
-      orderBy: [desc(notifications.createdAt)],
-    })
+    const data = await getNotificationsService(user.id)
 
     return NextResponse.json(data)
   } catch (error) {

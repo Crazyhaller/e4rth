@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { notifications } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
+import { createNotificationService } from '@/server/services/notification.service'
 
 /**
  * POST /api/notifications/create
@@ -21,16 +20,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
     }
 
-    const created = await db
-      .insert(notifications)
-      .values({
-        userId: user.id,
-        type,
-        message,
-      })
-      .returning()
+    const created = await createNotificationService({
+      userId: user.id,
 
-    return NextResponse.json(created[0], { status: 201 })
+      type,
+
+      message,
+    })
+
+    return NextResponse.json(created, { status: 201 })
   } catch (error) {
     console.error('Create notification error:', error)
 

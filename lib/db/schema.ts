@@ -19,10 +19,10 @@ export const planEnum = pgEnum('plan', ['free', 'premium'])
 export const severityEnum = pgEnum('severity', ['low', 'medium', 'high'])
 
 export const notificationTypeEnum = pgEnum('notification_type', [
-  'watering',
-  'disease',
-  'reminder',
-  'system',
+  'care_reminder',
+  'plant_alert',
+  'scan_completed',
+  'growth_insight',
 ])
 
 export const subscriptionStatusEnum = pgEnum('subscription_status', [

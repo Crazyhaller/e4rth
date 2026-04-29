@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { notifications } from '@/lib/db/schema'
+
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { eq, and } from 'drizzle-orm'
+
+import { markNotificationsReadService } from '@/server/services/notification.service'
 
 /**
  * PATCH /api/notifications/read
@@ -28,14 +28,10 @@ export async function PATCH(req: Request) {
     /**
      * 🔔 Mark notifications as read
      */
-    for (const id of notificationIds) {
-      await db
-        .update(notifications)
-        .set({
-          isRead: true,
-        })
-        .where(and(eq(notifications.id, id), eq(notifications.userId, user.id)))
-    }
+    await markNotificationsReadService({
+      userId: user.id,
+      notificationIds,
+    })
 
     return NextResponse.json({
       success: true,
