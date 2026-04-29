@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { plants } from '@/lib/db/schema'
+
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { eq, and } from 'drizzle-orm'
+
+import {
+  deletePlantService,
+  getPlantByIdService,
+  updatePlantService,
+} from '@/server/services/plant.service'
 
 /**
  * GET /api/plants/:id
@@ -20,8 +24,9 @@ export async function GET(
 
     const { id: plantId } = await params
 
-    const plant = await db.query.plants.findFirst({
-      where: and(eq(plants.id, plantId), eq(plants.userId, user.id)),
+    const plant = await getPlantByIdService({
+      userId: user.id,
+      plantId,
     })
 
     if (!plant) {
@@ -66,26 +71,22 @@ export async function PATCH(
     }
 
     // Ensure plant belongs to user
-    const existing = await db.query.plants.findFirst({
-      where: and(eq(plants.id, plantId), eq(plants.userId, user.id)),
+    const existing = await getPlantByIdService({
+      userId: user.id,
+      plantId,
     })
 
     if (!existing) {
       return NextResponse.json({ error: 'Plant not found' }, { status: 404 })
     }
 
-    const updated = await db
-      .update(plants)
-      .set({
-        name: name ?? existing.name,
-        species: species ?? existing.species,
-        location: location ?? existing.location,
-        tags: Array.isArray(tags) ? tags : existing.tags,
-      })
-      .where(eq(plants.id, plantId))
-      .returning()
+    const updated = await updatePlantService({
+      userId: user.id,
+      plantId,
+      body,
+    })
 
-    return NextResponse.json(updated[0], { status: 200 })
+    return NextResponse.json(updated, { status: 200 })
   } catch (error) {
     console.error('Update plant error:', error)
 
@@ -113,15 +114,19 @@ export async function DELETE(
     const { id: plantId } = await params
 
     // Ensure plant belongs to user
-    const existing = await db.query.plants.findFirst({
-      where: and(eq(plants.id, plantId), eq(plants.userId, user.id)),
+    const existing = await getPlantByIdService({
+      userId: user.id,
+      plantId,
     })
 
     if (!existing) {
       return NextResponse.json({ error: 'Plant not found' }, { status: 404 })
     }
 
-    await db.delete(plants).where(eq(plants.id, plantId))
+    await deletePlantService({
+      userId: user.id,
+      plantId,
+    })
 
     return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {

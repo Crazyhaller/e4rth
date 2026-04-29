@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { plants, carePlans } from '@/lib/db/schema'
+
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { eq, and } from 'drizzle-orm'
+import {
+  getPlantByIdService,
+  getPlantCarePlanService,
+} from '@/server/services/plant.service'
 
 /**
  * GET /api/plants/:id/care-plan
@@ -23,8 +25,9 @@ export async function GET(
     /**
      * 🌿 Verify plant ownership
      */
-    const plant = await db.query.plants.findFirst({
-      where: and(eq(plants.id, plantId), eq(plants.userId, user.id)),
+    const plant = await getPlantByIdService({
+      userId: user.id,
+      plantId,
     })
 
     if (!plant) {
@@ -34,8 +37,9 @@ export async function GET(
     /**
      * 🌱 Fetch care plan
      */
-    const plan = await db.query.carePlans.findFirst({
-      where: eq(carePlans.plantId, plantId),
+    const plan = await getPlantCarePlanService({
+      userId: user.id,
+      plantId,
     })
 
     if (!plan) {

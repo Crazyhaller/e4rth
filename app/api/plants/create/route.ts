@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { plants } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
+import { createPlantService } from '@/server/services/plant.service'
 
 /**
  * POST /api/plants/create
@@ -16,28 +15,14 @@ export async function POST(req: Request) {
 
     const body = await req.json()
 
-    const { name, species, location, tags } = body
+    const plant = await createPlantService({
+      userId: user.id,
+      body,
+    })
 
-    // Basic validation
-    if (!name || typeof name !== 'string') {
-      return NextResponse.json(
-        { error: 'Plant name is required' },
-        { status: 400 },
-      )
-    }
-
-    const newPlant = await db
-      .insert(plants)
-      .values({
-        userId: user.id,
-        name,
-        species: species ?? null,
-        location: location ?? null,
-        tags: Array.isArray(tags) ? tags : [],
-      })
-      .returning()
-
-    return NextResponse.json(newPlant[0], { status: 201 })
+    return NextResponse.json(plant, {
+      status: 201,
+    })
   } catch (error) {
     console.error('Create plant error:', error)
 
