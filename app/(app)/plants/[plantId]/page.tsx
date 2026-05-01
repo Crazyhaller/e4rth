@@ -7,9 +7,18 @@ import GrowthChart from '@/features/analytics/components/GrowthChart'
 import AddGrowthLogForm from '@/features/analytics/components/AddGrowthLogForm'
 import { notify } from '@/lib/toast'
 import { CarePlan, Plant } from '@/types/plant'
+import {
+  deletePlant,
+  generateCarePlan,
+  getCarePlan,
+  getPlant,
+  updatePlant,
+} from '@/features/plants/services/plants.service'
 
 export default function PlantDetailPage() {
-  const { plantId } = useParams()
+  const params = useParams()
+  const plantId =
+    typeof params.plantId === 'string' ? params.plantId : undefined
   const router = useRouter()
 
   const [plant, setPlant] = useState<Plant | null>(null)
@@ -26,25 +35,11 @@ export default function PlantDetailPage() {
     tags: '',
   })
 
-  // FETCH CARE PLAN
-  const fetchCarePlan = async () => {
-    try {
-      const res = await fetch(`/api/plants/${plantId}/care-plan`)
-      const data = await res.json()
-
-      if (!data.error) {
-        setCarePlan(data)
-      }
-    } catch (err) {
-      console.error('Failed to fetch care plan:', err)
-    }
-  }
-
   // FETCH PLANT
   const fetchPlant = async () => {
+    if (typeof plantId !== 'string') return
     try {
-      const res = await fetch(`/api/plants/${plantId}`)
-      const data = await res.json()
+      const data = await await getPlant(plantId)
       setPlant(data)
 
       await fetchCarePlan()
@@ -62,21 +57,34 @@ export default function PlantDetailPage() {
     }
   }
 
+  useEffect(() => {
+    const loadPlant = async () => {
+      if (plantId) {
+        await fetchPlant()
+      }
+    }
+    loadPlant()
+  }, [plantId])
+
+  // FETCH CARE PLAN
+  const fetchCarePlan = async () => {
+    if (typeof plantId !== 'string') return
+
+    try {
+      const data = await getCarePlan(plantId)
+
+      setCarePlan(data)
+    } catch (err) {
+      console.error('Failed to fetch care plan:', err)
+    }
+  }
+
   // GENERATE CARE PLAN
   const handleGeneratePlan = async () => {
     try {
       setLoadingPlan(true)
 
-      const res = await fetch('/api/ai/care-plan', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ plantId }),
-      })
-
-      const data = await res.json()
-
+      const data = await generateCarePlan(plantId!)
       setCarePlan(data)
       notify.success('Care plan generated 🌱')
     } catch (err) {
@@ -87,29 +95,16 @@ export default function PlantDetailPage() {
     }
   }
 
-  useEffect(() => {
-    if (plantId) fetchPlant()
-  }, [plantId])
-
   /* =========================
      UPDATE
   ========================= */
   const handleUpdate = async () => {
     try {
-      await fetch(`/api/plants/${plantId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: form.name,
-          species: form.species,
-          location: form.location,
-          tags: form.tags
-            .split(',')
-            .map((t) => t.trim())
-            .filter(Boolean),
-        }),
+      await updatePlant(plantId!, {
+        name: form.name,
+        species: form.species,
+        location: form.location,
+        tags: form.tags.split(',').map((t) => t.trim()),
       })
 
       setEditing(false)
@@ -130,9 +125,7 @@ export default function PlantDetailPage() {
     if (!confirmDelete) return
 
     try {
-      await fetch(`/api/plants/${plantId}`, {
-        method: 'DELETE',
-      })
+      await deletePlant(plantId!)
 
       notify.success('Plant deleted')
       router.push('/plants')

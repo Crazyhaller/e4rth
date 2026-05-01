@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 
 import { checkAiUsage } from '@/lib/usage/checkAiUsage'
-import { createScanService } from '@/server/services/scan.service'
+import { createScanService } from '@/server/services/scan.server-service'
 
 /**
  * POST /api/scan

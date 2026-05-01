@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 
-import { markNotificationsReadService } from '@/server/services/notification.service'
+import { markNotificationsReadService } from '@/server/services/notification.server-service'
 
 /**
  * PATCH /api/notifications/read

@@ -6,7 +6,7 @@ import {
   deletePlantService,
   getPlantByIdService,
   updatePlantService,
-} from '@/server/services/plant.service'
+} from '@/server/services/plant.server-service'
 
 /**
  * GET /api/plants/:id

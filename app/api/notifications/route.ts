@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 
-import { getNotificationsService } from '@/server/services/notification.service'
+import { getNotificationsService } from '@/server/services/notification.server-service'
 
 /**
  * GET /api/notifications

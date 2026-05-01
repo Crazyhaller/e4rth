@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import AddPlantModal from '@/features/plants/components/AddPlantModal'
 import Link from 'next/link'
+import { getPlants } from '@/features/plants/services/plants.service'
 
 type Plant = {
   id: string
@@ -20,8 +21,7 @@ export default function PlantsPage() {
 
   const fetchPlants = async () => {
     try {
-      const res = await fetch('/api/plants')
-      const data = await res.json()
+      const data = await getPlants()
       setPlants(data)
     } catch (error) {
       console.error('Failed to fetch plants:', error)
@@ -31,7 +31,30 @@ export default function PlantsPage() {
   }
 
   useEffect(() => {
-    fetchPlants()
+    let mounted = true
+
+    const loadPlants = async () => {
+      try {
+        const data = await getPlants()
+        if (mounted) {
+          setPlants(data)
+        }
+      } catch (error) {
+        if (mounted) {
+          console.error('Failed to fetch plants:', error)
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadPlants()
+
+    return () => {
+      mounted = false
+    }
   }, [])
 
   /* =========================

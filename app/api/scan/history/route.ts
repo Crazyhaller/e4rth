@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { getScanHistoryService } from '@/server/services/scan.service'
+import { getScanHistoryService } from '@/server/services/scan.server-service'
 
 /**
  * GET /api/scan/history

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 
-import { getGlobalAnalyticsService } from '@/server/services/analytics.service'
+import { getGlobalAnalyticsService } from '@/server/services/analytics.server-service'
 
 /**
  * GET /api/analytics/global

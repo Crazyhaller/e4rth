@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { createNotificationService } from '@/server/services/notification.service'
+import { createNotificationService } from '@/server/services/notification.server-service'
 
 /**
  * POST /api/notifications/create

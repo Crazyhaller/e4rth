@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { getPlantAnalyticsService } from '@/server/services/analytics.service'
+import { getPlantAnalyticsService } from '@/server/services/analytics.server-service'
 
 /**
  * GET /api/analytics/plant/:id

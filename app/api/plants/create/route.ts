@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { createPlantService } from '@/server/services/plant.service'
+import { createPlantService } from '@/server/services/plant.server-service'
 
 /**
  * POST /api/plants/create

@@ -14,6 +14,7 @@ import {
   Filler,
 } from 'chart.js'
 import { GrowthLog } from '@/types/plant'
+import { getGrowthLogs } from '@/features/plants/services/plants.service'
 
 ChartJS.register(
   LineElement,
@@ -34,8 +35,7 @@ export default function GrowthChart({ plantId, refreshKey }: Props) {
   const [logs, setLogs] = useState<GrowthLog[]>([])
   useEffect(() => {
     const fetchLogs = async () => {
-      const res = await fetch(`/api/logs/${plantId}`)
-      const data = await res.json()
+      const data = await getGrowthLogs(plantId)
       setLogs(data.reverse())
     }
 

@@ -4,7 +4,7 @@ import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import {
   getPlantByIdService,
   getPlantCarePlanService,
-} from '@/server/services/plant.service'
+} from '@/server/services/plant.server-service'
 
 /**
  * GET /api/plants/:id/care-plan
