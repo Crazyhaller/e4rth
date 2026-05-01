@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -12,11 +13,180 @@ import {
   Sparkles,
 } from 'lucide-react'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
+import { useGlobalAnalytics } from '@/features/analytics/hooks/useGlobalAnalytics'
+import { useNotifications } from '@/features/notifications/hooks/useNotifications'
+import { useScanHistory } from '@/features/scan/hooks/useScanHistory'
+import type { NotificationItem } from '@/types/notification'
+import type { Scan } from '@/types/scan'
 
 const dashboardImage =
   'https://images.unsplash.com/photo-1517191434949-5e90cd67d2b6?auto=format&fit=crop&w=1400&q=85'
 
+function formatRelativeTime(date?: string | Date | null) {
+  if (!date) return 'Unknown time'
+  const timestamp = new Date(date).getTime()
+  const diff = Date.now() - timestamp
+
+  if (diff < 60_000) return 'Just now'
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)} min ago`
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)} hr ago`
+
+  return new Intl.DateTimeFormat(undefined, {
+    month: 'short',
+    day: 'numeric',
+  }).format(timestamp)
+}
+
+function getNotificationLabel(type: NotificationItem['type']) {
+  switch (type) {
+    case 'scan_completed':
+      return 'Scan completed'
+    case 'care_reminder':
+      return 'Care reminder'
+    case 'plant_alert':
+      return 'Plant alert'
+    case 'growth_insight':
+      return 'Growth insight'
+    default:
+      return 'Activity'
+  }
+}
+
+function getNotificationIcon(type: NotificationItem['type']) {
+  switch (type) {
+    case 'scan_completed':
+      return <Camera className="h-5 w-5" />
+    case 'care_reminder':
+      return <Droplets className="h-5 w-5" />
+    case 'plant_alert':
+      return <Bell className="h-5 w-5" />
+    case 'growth_insight':
+      return <Sparkles className="h-5 w-5" />
+    default:
+      return <Sparkles className="h-5 w-5" />
+  }
+}
+
 export default function DashboardPage() {
+  const { analytics, loading: analyticsLoading } = useGlobalAnalytics()
+  const { notifications, loading: notificationsLoading } = useNotifications()
+  const { history: scanHistory, loading: scanHistoryLoading } = useScanHistory()
+
+  const stats = useMemo(
+    () => [
+      {
+        label: 'Total plants',
+        value: analytics?.totalPlants ?? '–',
+        sub: 'Plants in your collection',
+        icon: <Leaf className="h-5 w-5" />,
+      },
+      {
+        label: 'Completed scans',
+        value: analytics?.totalScans ?? '–',
+        sub: 'Diagnoses processed for your plants',
+        icon: <Camera className="h-5 w-5" />,
+      },
+      {
+        label: 'Unread alerts',
+        value: analytics?.unreadNotifications ?? '–',
+        sub: 'Pending notifications to review',
+        icon: <Bell className="h-5 w-5" />,
+      },
+      {
+        label: 'Average health',
+        value:
+          analytics?.averageHealthScore != null
+            ? `${Math.round(analytics.averageHealthScore)}%`
+            : '–',
+        sub: 'Calculated from recent growth logs',
+        icon: <Activity className="h-5 w-5" />,
+      },
+    ],
+    [analytics],
+  )
+
+  const activities = useMemo(() => {
+    if (notifications.length > 0) {
+      return notifications.slice(0, 3).map((notification) => ({
+        title: getNotificationLabel(notification.type),
+        copy: notification.message,
+        time: formatRelativeTime(notification.createdAt),
+        icon: getNotificationIcon(notification.type),
+      }))
+    }
+
+    if (scanHistory.length > 0) {
+      return scanHistory.slice(0, 3).map((scan: Scan) => ({
+        title:
+          scan.disease === 'healthy'
+            ? 'Scan completed'
+            : `Scan detected ${scan.disease}`,
+        copy: `Severity ${scan.severity} · Confidence ${Math.round(
+          scan.confidence * 100,
+        )}%`,
+        time: formatRelativeTime(scan.createdAt),
+        icon: <Camera className="h-5 w-5" />,
+      }))
+    }
+
+    return [
+      {
+        title: 'No recent activity yet',
+        copy: 'Run a scan or add a growth log to populate your dashboard.',
+        time: 'Start now',
+        icon: <Sparkles className="h-5 w-5" />,
+      },
+    ]
+  }, [notifications, scanHistory])
+
+  const aiInsight = useMemo(() => {
+    if (analyticsLoading || notificationsLoading || scanHistoryLoading) {
+      return {
+        message: 'Loading your dashboard insights…',
+        action: 'Refresh the page if this takes too long.',
+      }
+    }
+
+    if (!analytics) {
+      return {
+        message:
+          'No analytics yet. Add a plant or run a scan to generate insights.',
+        action: 'Start with your first diagnosis.',
+      }
+    }
+
+    if (analytics.unreadNotifications > 0) {
+      return {
+        message: `You have ${analytics.unreadNotifications} unread alert${
+          analytics.unreadNotifications === 1 ? '' : 's'
+        }. Review them to keep your plants healthy.`,
+        action: 'Open notifications to resolve issues.',
+      }
+    }
+
+    if (analytics.averageHealthScore >= 85) {
+      return {
+        message:
+          'Your plant collection looks healthy. Keep tracking scans and logs to stay ahead.',
+        action: 'Add a growth log to keep the trend current.',
+      }
+    }
+
+    if (analytics.averageHealthScore < 70) {
+      return {
+        message:
+          'Some plants may need extra attention. Review recent scans and care reminders.',
+        action: 'Check your latest notifications and plant details.',
+      }
+    }
+
+    return {
+      message:
+        'Your plants are stable. A fresh scan or growth log will make your care plan smarter.',
+      action: 'Run a diagnosis or log plant growth today.',
+    }
+  }, [analytics, analyticsLoading, notificationsLoading, scanHistoryLoading])
+
   return (
     <div className="space-y-8">
       <AnimatedContainer>
@@ -92,7 +262,7 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {activities.map((activity) => (
                 <div
-                  key={activity.title}
+                  key={activity.title + activity.time}
                   className="flex items-start gap-4 rounded-2xl border border-border/70 bg-background/42 p-4"
                 >
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-primary/12 text-primary">
@@ -125,16 +295,14 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="text-sm leading-7 text-foreground/68">
-              Your collection shows stable health, but humidity-sensitive plants
-              may benefit from misting tomorrow morning. Review Monstera and
-              fern care plans before the next watering cycle.
+              {aiInsight.message}
             </p>
             <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/10 p-4">
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
                 Recommended action
               </p>
               <p className="mt-2 text-sm text-foreground/72">
-                Add one growth log today to improve trend accuracy.
+                {aiInsight.action}
               </p>
             </div>
           </div>
@@ -143,51 +311,3 @@ export default function DashboardPage() {
     </div>
   )
 }
-
-const stats = [
-  {
-    label: 'Total Plants',
-    value: '12',
-    sub: '+2 this week',
-    icon: <Leaf className="h-5 w-5" />,
-  },
-  {
-    label: 'Needs Attention',
-    value: '3',
-    sub: 'Watering and humidity checks',
-    icon: <Bell className="h-5 w-5" />,
-  },
-  {
-    label: 'Watered Today',
-    value: '5',
-    sub: 'Consistent care rhythm',
-    icon: <Droplets className="h-5 w-5" />,
-  },
-  {
-    label: 'Health Score',
-    value: '87%',
-    sub: 'Portfolio condition',
-    icon: <Activity className="h-5 w-5" />,
-  },
-]
-
-const activities = [
-  {
-    title: 'AI diagnosis completed',
-    copy: 'Monstera scan showed no active disease and suggested a humidity adjustment.',
-    time: '2 hours ago',
-    icon: <Camera className="h-5 w-5" />,
-  },
-  {
-    title: 'Watering cycle logged',
-    copy: 'Snake Plant and Pothos were marked complete with stable health signals.',
-    time: '5 hours ago',
-    icon: <Droplets className="h-5 w-5" />,
-  },
-  {
-    title: 'Care plan refinement',
-    copy: 'AI recommended lighter fertilizer frequency for indoor tropical plants.',
-    time: 'Yesterday',
-    icon: <Sparkles className="h-5 w-5" />,
-  },
-]
