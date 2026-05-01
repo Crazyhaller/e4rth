@@ -4,6 +4,12 @@ import {
   getUserScans,
 } from '@/server/repositories/scan.repo'
 
+import {
+  createPlant,
+  getPlantById,
+  updatePlant,
+} from '@/server/repositories/plant.repo'
+
 import { scanSchema } from '@/lib/validators/scan.validator'
 
 import { checkAiUsage } from '@/lib/usage/checkAiUsage'
@@ -48,13 +54,45 @@ export async function createScanService({
    */
   const aiResult = await analyzePlantImage(parsed.data.imageUrl)
 
+  let plantId = parsed.data.plantId ?? null
+
+  if (!plantId) {
+    const plant = await createPlant({
+      userId,
+      data: {
+        name: 'Scanned plant',
+        species: null,
+        location: null,
+        imageUrl: parsed.data.imageUrl,
+        tags: [],
+      },
+    })
+
+    plantId = plant.id
+  } else {
+    const plant = await getPlantById({
+      userId,
+      plantId,
+    })
+
+    if (plant && !plant.imageUrl) {
+      await updatePlant({
+        userId,
+        plantId,
+        data: {
+          imageUrl: parsed.data.imageUrl,
+        },
+      })
+    }
+  }
+
   /**
    * 💾 Store scan
    */
   const scan = await createScan({
     userId,
 
-    plantId: parsed.data.plantId ?? null,
+    plantId,
 
     imageUrl: parsed.data.imageUrl,
 

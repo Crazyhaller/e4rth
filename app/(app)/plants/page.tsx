@@ -100,7 +100,9 @@ export default function PlantsPage() {
               >
                 <div className="relative h-52 overflow-hidden">
                   <Image
-                    src={plantImages[index % plantImages.length]}
+                    src={
+                      plant.imageUrl ?? plantImages[index % plantImages.length]
+                    }
                     alt={plant.name}
                     fill
                     className="object-cover transition duration-700 group-hover:scale-105"

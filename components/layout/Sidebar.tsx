@@ -137,8 +137,8 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          'sticky top-0 hidden h-screen border-r border-border/70 bg-card/64 shadow-soft backdrop-blur-2xl transition-[width] lg:block',
-          collapsed ? 'w-20' : 'w-64',
+          'sticky top-0 hidden h-screen min-w-[6rem] border-r border-border/70 bg-card/64 shadow-soft backdrop-blur-2xl transition-[width] lg:block overflow-hidden',
+          collapsed ? 'w-24' : 'w-64',
         )}
       >
         {sidebar}

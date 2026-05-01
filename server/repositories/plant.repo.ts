@@ -28,6 +28,7 @@ export async function createPlant({
       name: data.name,
       species: data.species ?? null,
       location: data.location ?? null,
+      imageUrl: data.imageUrl ?? null,
       tags: data.tags ?? [],
     })
     .returning()

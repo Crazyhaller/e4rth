@@ -202,12 +202,14 @@ export default function PlantDetailPage() {
               <div className="space-y-3">
                 <input
                   value={form.name}
+                  placeholder="Plant name (required)"
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10"
                 />
 
                 <input
                   value={form.species}
+                  placeholder="Species (optional)"
                   onChange={(e) =>
                     setForm({ ...form, species: e.target.value })
                   }
@@ -216,6 +218,7 @@ export default function PlantDetailPage() {
 
                 <input
                   value={form.location}
+                  placeholder="Location (optional)"
                   onChange={(e) =>
                     setForm({ ...form, location: e.target.value })
                   }
@@ -224,6 +227,7 @@ export default function PlantDetailPage() {
 
                 <input
                   value={form.tags}
+                  placeholder="Tags, comma separated (optional)"
                   onChange={(e) => setForm({ ...form, tags: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10"
                 />

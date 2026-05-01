@@ -11,6 +11,8 @@ export const createPlantSchema = z.object({
 
   location: z.string().max(100).optional().nullable(),
 
+  imageUrl: z.string().url().optional().nullable(),
+
   tags: z.array(z.string()).optional().default([]),
 })
 

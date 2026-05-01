@@ -65,6 +65,7 @@ export const plants = pgTable('plants', {
   name: text('name').notNull(),
   species: text('species'),
   location: text('location'),
+  imageUrl: text('image_url'),
 
   tags: text('tags').array(),
 

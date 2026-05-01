@@ -13,6 +13,8 @@ export interface Plant {
 
   location: string | null
 
+  imageUrl?: string | null
+
   tags: string[]
 
   createdAt: string

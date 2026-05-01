@@ -26,6 +26,7 @@ export async function createPlant(body: {
   species?: string
   location?: string
   tags?: string[]
+  imageUrl?: string | null
 }) {
   return apiRequest<Plant>('/api/plants/create', {
     method: 'POST',
