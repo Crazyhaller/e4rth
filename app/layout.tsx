@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import ToastProvider from '@/components/providers/ToastProvider'
+import ThemeProvider from '@/components/providers/ThemeProvider'
 
 export const metadata: Metadata = {
   title: 'E4rth',
-  description: 'AI-powered plant intelligence platform',
+  description: 'Premium AI-powered plant intelligence platform',
 }
 
 export default function RootLayout({
@@ -15,10 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="">
+      <html lang="en" suppressHydrationWarning>
         <body className="min-h-full flex flex-col">
-          {children}
-          <ToastProvider />
+          <ThemeProvider>
+            {children}
+            <ToastProvider />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

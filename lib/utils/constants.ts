@@ -2,7 +2,7 @@
    APP
 ========================================= */
 
-export const APP_NAME = 'VerdantAI'
+export const APP_NAME = 'E4rth'
 
 export const APP_DESCRIPTION = 'AI-powered plant intelligence platform'
 

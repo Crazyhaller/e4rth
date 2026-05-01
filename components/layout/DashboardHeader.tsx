@@ -2,10 +2,8 @@
 
 import { usePathname } from 'next/navigation'
 import { UserButton } from '@clerk/nextjs'
-import { cn } from '@/lib/utils'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell } from '@fortawesome/free-solid-svg-icons'
 import NotificationBell from '@/features/notifications/components/NotificationBell'
+import ThemeToggle from '@/components/shared/ThemeToggle'
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -25,25 +23,24 @@ export default function DashboardHeader() {
     (pathname.startsWith('/plants/') ? 'Plant Details' : 'Dashboard')
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-black/20 backdrop-blur-xl">
-      {/* 🌿 Page Title */}
-      <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/70 bg-card/72 px-6 pl-16 shadow-soft backdrop-blur-2xl lg:pl-6">
+      <div>
+        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-primary/80">
+          E4rth
+        </p>
+        <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+      </div>
 
-      {/* 🌱 Actions */}
       <div className="flex items-center gap-4">
-        {/* 🔔 Notifications */}
+        <ThemeToggle />
         <NotificationBell />
-
-        {/* 👤 User */}
-        <div className="flex items-center">
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: 'w-9 h-9',
-              },
-            }}
-          />
-        </div>
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: 'w-9 h-9 ring-2 ring-primary/20',
+            },
+          }}
+        />
       </div>
     </header>
   )

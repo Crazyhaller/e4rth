@@ -5,6 +5,9 @@ import { notifications } from '@/lib/db/schema'
 import { and, eq, inArray, desc } from 'drizzle-orm'
 
 import { NOTIFICATION_TYPES } from '@/lib/utils/constants'
+import { publishRealtimeEvent } from '@/lib/redis/client'
+import { REDIS_CHANNELS } from '@/websocket/events'
+import type { NotificationItem } from '@/types/notification'
 
 /* =========================================
    CREATE NOTIFICATION
@@ -32,7 +35,14 @@ export async function createNotificationService({
     })
     .returning()
 
-  return created[0]
+  const notification = created[0] as NotificationItem
+
+  await publishRealtimeEvent(REDIS_CHANNELS.NOTIFICATIONS, {
+    userId,
+    notification,
+  })
+
+  return notification
 }
 
 /* =========================================
@@ -74,6 +84,11 @@ export async function markNotificationsReadService({
         inArray(notifications.id, notificationIds),
       ),
     )
+
+  await publishRealtimeEvent(REDIS_CHANNELS.NOTIFICATIONS, {
+    userId,
+    notificationIds,
+  })
 
   return {
     success: true,

@@ -1,34 +1,29 @@
 @import 'tailwindcss';
 
-/* Set up class-based dark mode */
 @variant dark (&:is(.dark *));
 
-/* =========================================
-   1. TAILWIND THEME CONFIGURATION
-   ========================================= */
 @theme {
-  /* 🌿 Primary Botanical Palette */
-  --color-e4rth-50: #f3faf5;
-  --color-e4rth-100: #e6f5ea;
-  --color-e4rth-200: #ccebd6;
-  --color-e4rth-300: #99d7ad;
-  --color-e4rth-400: #66c384;
-  --color-e4rth-500: #3fae68;
-  --color-e4rth-600: #2f8a52;
-  --color-e4rth-700: #22643c;
-  --color-e4rth-800: #163f26;
-  --color-e4rth-900: #0b2315;
+  --color-e4rth-50: #f8f4ea;
+  --color-e4rth-100: #eee4cf;
+  --color-e4rth-200: #dcc9a4;
+  --color-e4rth-300: #c7a975;
+  --color-e4rth-400: #ac854e;
+  --color-e4rth-500: #7e5c32;
+  --color-e4rth-600: #644726;
+  --color-e4rth-700: #4c351d;
+  --color-e4rth-800: #352414;
+  --color-e4rth-900: #21150c;
 
-  /* 🌱 Accent tones */
-  --color-moss: #6b8f71;
-  --color-leaf: #4caf50;
-  --color-forest: #1b4332;
+  --color-moss: #69764e;
+  --color-leaf: #8ea462;
+  --color-forest: #28381f;
+  --color-olive: #4b552f;
+  --color-bark: #4a3322;
+  --color-soil: #241810;
+  --color-sand: #eadfc8;
+  --color-cream: #f8f1e2;
+  --color-stone: #343126;
 
-  /* 🌫️ Neutral tones */
-  --color-stone: #2f2f2f;
-  --color-sand: #e6e2d3;
-
-  /* UI Tokens mapped to HSL variables */
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -38,132 +33,174 @@
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
 
-  /* Typography & Structure */
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --blur-xs: 2px;
+  --radius-2xl: 1.25rem;
+  --shadow-glow: 0 18px 70px rgba(94, 111, 58, 0.28);
+  --shadow-soft: 0 18px 45px rgba(47, 32, 18, 0.12);
+  --shadow-glass: 0 24px 70px rgba(36, 24, 16, 0.22);
 
-  /* Effects & Shadows */
-  --shadow-glow: 0 0 40px rgba(63, 174, 104, 0.35);
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.15);
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.25);
-
-  /* Background Images */
   --background-image-gradient-e4rth: linear-gradient(
     135deg,
-    #3fae68 0%,
-    #1b4332 100%
+    #6f7b44 0%,
+    #594026 48%,
+    #2b381f 100%
   );
   --background-image-gradient-earth: linear-gradient(
     135deg,
-    #6b8f71 0%,
-    #2f2f2f 100%
+    #eadfc8 0%,
+    #8f7758 42%,
+    #2d2417 100%
   );
-
-  /* Animations */
-  --animate-float: float 6s ease-in-out infinite;
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
 }
 
-/* =========================================
-   2. CSS VARIABLES & BASE RESET 
-   ========================================= */
 @layer base {
   :root {
-    --background: 140 40% 98%;
-    --foreground: 140 30% 10%;
-    --card: 140 40% 100%;
-    --card-foreground: 140 30% 10%;
-    --primary: 140 45% 45%;
-    --primary-foreground: 0 0% 100%;
-    --border: 140 20% 85%;
-    --input: 140 20% 90%;
-    --ring: 140 45% 45%;
+    --background: 42 46% 94%;
+    --foreground: 34 29% 13%;
+    --card: 42 42% 90%;
+    --card-foreground: 34 29% 13%;
+    --primary: 78 32% 33%;
+    --primary-foreground: 42 48% 96%;
+    --muted: 42 30% 86%;
+    --muted-foreground: 35 18% 36%;
+    --border: 38 26% 74%;
+    --input: 41 28% 82%;
+    --ring: 78 32% 33%;
   }
 
-  /* 🌑 Dark Mode */
   .dark {
-    --background: 140 30% 8%;
-    --foreground: 140 20% 92%;
-    --card: 140 25% 12%;
-    --card-foreground: 140 20% 92%;
-    --primary: 140 50% 50%;
-    --primary-foreground: 0 0% 100%;
-    --border: 140 15% 20%;
-    --input: 140 15% 18%;
-    --ring: 140 50% 50%;
+    --background: 34 32% 7%;
+    --foreground: 43 35% 88%;
+    --card: 37 25% 11%;
+    --card-foreground: 43 35% 88%;
+    --primary: 77 34% 52%;
+    --primary-foreground: 35 30% 9%;
+    --muted: 36 20% 15%;
+    --muted-foreground: 43 18% 67%;
+    --border: 40 17% 21%;
+    --input: 38 20% 17%;
+    --ring: 77 34% 52%;
   }
 
-  /* 🌍 Global Element Resets */
   * {
     @apply border-border;
     transition:
-      background-color 0.3s ease,
-      border-color 0.3s ease;
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.2s ease,
+      box-shadow 0.25s ease;
   }
 
-  html,
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
+    min-height: 100vh;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
+      color-mix(in srgb, hsl(var(--background)) 86%, #6f7b44) 48%,
+      color-mix(in srgb, hsl(var(--background)) 90%, #4a3322) 100%
+    );
+  }
+
+  ::selection {
+    background: rgba(111, 123, 68, 0.35);
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    outline-color: hsl(var(--ring));
   }
 }
 
-/* =========================================
-   3. SCROLLBARS
-   ========================================= */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b2315;
+  background: hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2f8a52;
-  border-radius: 10px;
+  background: linear-gradient(#6f7b44, #594026);
+  border: 2px solid hsl(var(--background));
+  border-radius: 999px;
 }
 
-/* =========================================
-   4. CUSTOM UTILITIES
-   ========================================= */
 @layer utilities {
-  /* 🌫️ Glass Utilities */
   .glass {
-    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-glass;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.58),
+      rgba(255, 255, 255, 0.24)
+    );
+    border: 1px solid rgba(103, 79, 50, 0.16);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(22px) saturate(135%);
+  }
+
+  .dark .glass {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.095),
+      rgba(255, 255, 255, 0.035)
+    );
+    border-color: rgba(234, 223, 200, 0.12);
   }
 
   .glass-card {
-    backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, hsl(var(--card)) 82%, transparent);
+    border: 1px solid hsl(var(--border) / 0.65);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(18px);
   }
 
-  /* 🌿 Gradient Texts & Backgrounds */
   .text-gradient {
-    background: linear-gradient(135deg, #3fae68, #1b4332);
+    background: linear-gradient(135deg, #4b552f, #8a6237 52%, #1f3219);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .dark .text-gradient {
+    background: linear-gradient(135deg, #c7d59a, #c79b67 55%, #8ea462);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .bg-ambient {
-    background:
-      radial-gradient(
-        circle at 20% 20%,
-        rgba(63, 174, 104, 0.2),
-        transparent 40%
-      ),
-      radial-gradient(circle at 80% 80%, rgba(27, 67, 50, 0.2), transparent 40%);
+    background: linear-gradient(
+      140deg,
+      color-mix(in srgb, hsl(var(--background)) 88%, #4b552f) 0%,
+      hsl(var(--background)) 45%,
+      color-mix(in srgb, hsl(var(--background)) 84%, #4a3322) 100%
+    );
+  }
+
+  .surface {
+    @apply rounded-2xl border border-border/70 bg-card/78 shadow-soft backdrop-blur-xl;
+  }
+
+  .premium-ring {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 24px 80px rgba(47, 32, 18, 0.18);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-gradient-e4rth px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-glow transition hover:-translate-y-0.5 hover:opacity-95 hover:cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-border/80 bg-card/70 px-5 py-2.5 text-sm font-medium text-foreground shadow-soft backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:cursor-pointer;
   }
 }

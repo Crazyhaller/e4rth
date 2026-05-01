@@ -10,6 +10,8 @@ export interface PlantAnalytics {
   totalLogs: number
 
   diseaseCount: number
+
+  logs: GrowthLog[]
 }
 
 /* =========================================
@@ -24,4 +26,9 @@ export interface GlobalAnalytics {
   totalNotifications: number
 
   healthyPlants: number
+
+  unreadNotifications: number
+
+  averageHealthScore: number
 }
+import type { GrowthLog } from './plant'

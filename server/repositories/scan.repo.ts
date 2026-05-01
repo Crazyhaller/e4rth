@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { scans } from '@/lib/db/schema'
 
 import { eq, desc } from 'drizzle-orm'
+import type { DiagnosisResult } from '@/types/ai'
 
 /* =========================================
    CREATE SCAN
@@ -29,7 +30,7 @@ export async function createScan({
 
   severity: 'low' | 'medium' | 'high'
 
-  rawResponse?: any
+  rawResponse?: DiagnosisResult
 }) {
   const created = await db
     .insert(scans)

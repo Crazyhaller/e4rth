@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import GrowthChart from '@/features/analytics/components/GrowthChart'
@@ -35,11 +35,25 @@ export default function PlantDetailPage() {
     tags: '',
   })
 
+  // FETCH CARE PLAN
+  const fetchCarePlan = useCallback(async () => {
+    if (typeof plantId !== 'string') return
+
+    try {
+      const data = await getCarePlan(plantId)
+
+      setCarePlan(data)
+    } catch (err) {
+      console.error('Failed to fetch care plan:', err)
+      setCarePlan(null)
+    }
+  }, [plantId])
+
   // FETCH PLANT
-  const fetchPlant = async () => {
+  const fetchPlant = useCallback(async () => {
     if (typeof plantId !== 'string') return
     try {
-      const data = await await getPlant(plantId)
+      const data = await getPlant(plantId)
       setPlant(data)
 
       await fetchCarePlan()
@@ -55,7 +69,7 @@ export default function PlantDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [fetchCarePlan, plantId])
 
   useEffect(() => {
     const loadPlant = async () => {
@@ -64,20 +78,7 @@ export default function PlantDetailPage() {
       }
     }
     loadPlant()
-  }, [plantId])
-
-  // FETCH CARE PLAN
-  const fetchCarePlan = async () => {
-    if (typeof plantId !== 'string') return
-
-    try {
-      const data = await getCarePlan(plantId)
-
-      setCarePlan(data)
-    } catch (err) {
-      console.error('Failed to fetch care plan:', err)
-    }
-  }
+  }, [fetchPlant, plantId])
 
   // GENERATE CARE PLAN
   const handleGeneratePlan = async () => {
@@ -182,14 +183,14 @@ export default function PlantDetailPage() {
               <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => setEditing(true)}
-                  className="px-4 py-2 rounded-xl border border-white/10 text-sm"
+                  className="px-4 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/5 transition hover:cursor-pointer"
                 >
                   Edit
                 </button>
 
                 <button
                   onClick={handleDelete}
-                  className="px-4 py-2 rounded-xl bg-red-500/80 text-white text-sm"
+                  className="px-4 py-2 rounded-xl bg-red-500/80 text-white text-sm hover:bg-red-500/90 transition hover:cursor-pointer"
                 >
                   Delete
                 </button>
@@ -232,14 +233,14 @@ export default function PlantDetailPage() {
               <div className="flex gap-3 mt-4">
                 <button
                   onClick={handleUpdate}
-                  className="px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
+                  className="px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow hover:shadow-glow-lg transition hover:cursor-pointer"
                 >
                   Save
                 </button>
 
                 <button
                   onClick={() => setEditing(false)}
-                  className="px-4 py-2 rounded-xl border border-white/10 text-sm"
+                  className="px-4 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/5 transition hover:cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -262,7 +263,7 @@ export default function PlantDetailPage() {
 
                 <button
                   onClick={handleGeneratePlan}
-                  className="px-3 py-1 text-xs rounded-xl bg-gradient-e4rth text-white shadow-glow"
+                  className="px-3 py-1 text-xs rounded-xl bg-gradient-e4rth text-white shadow-glow hover:shadow-glow-lg transition hover:cursor-pointer"
                 >
                   {loadingPlan
                     ? 'Generating...'

@@ -1,3 +1,5 @@
+import type { DiagnosisResult } from './ai'
+
 /* =========================================
    SCAN
 ========================================= */
@@ -15,9 +17,9 @@ export interface Scan {
 
   confidence: number
 
-  severity: string
+  severity: 'low' | 'medium' | 'high'
 
-  rawResponse?: any
+  rawResponse?: DiagnosisResult | null
 
-  createdAt: string
+  createdAt: string | Date | null
 }

@@ -1,66 +1,71 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import AnimatedContainer from '@/components/shared/AnimatedContainer'
+import ErrorState from '@/components/feedback/ErrorState'
+import Loader from '@/components/feedback/Loader'
 import UploadDropzone from '@/features/scan/components/UploadDropzone'
 import ScanHistoryList from '@/features/scan/components/ScanHistoryList'
-import AnimatedContainer from '@/components/shared/AnimatedContainer'
+import { useScanHistory } from '@/features/scan/hooks/useScanHistory'
 
 export default function ScanPage() {
-  const [history, setHistory] = useState<any[]>([])
-  const [activeId, setActiveId] = useState<string | null>(null)
-
-  /* =========================
-     FETCH HISTORY
-  ========================= */
-  const fetchHistory = async () => {
-    try {
-      const res = await fetch('/api/scan/history')
-      const data = await res.json()
-      setHistory(data)
-    } catch (err) {
-      console.error('History fetch failed:', err)
-    }
-  }
-
-  useEffect(() => {
-    fetchHistory()
-  }, [])
-
-  /* =========================
-     NEW SCAN HANDLER
-  ========================= */
-  const handleNewScan = (scan: any) => {
-    // Add new scan at top
-    setHistory((prev) => [scan, ...prev])
-
-    // Open it immediately
-    setActiveId(scan.id)
-  }
+  const {
+    activeId,
+    addOptimisticScan,
+    error,
+    history,
+    loading,
+    refresh,
+    setActiveId,
+  } = useScanHistory()
 
   return (
-    <div className="space-y-6">
-      {/* 🌿 Header */}
+    <div className="space-y-7">
       <AnimatedContainer>
-        <div>
-          <h2 className="text-2xl font-semibold">AI Plant Diagnosis 🌿</h2>
-          <p className="text-sm text-foreground/70 mt-1">
-            Upload an image and let AI detect plant diseases instantly.
-          </p>
-        </div>
+        <section className="surface overflow-hidden">
+          <div className="grid lg:grid-cols-[1fr_360px]">
+            <div className="p-6 md:p-8">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-primary">
+                AI diagnosis
+              </p>
+              <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
+                Turn one plant image into a clear treatment path.
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-foreground/64">
+                Upload a leaf or full-plant photo, link it to an existing plant,
+                and E4rth will store confidence, severity, and suggested care
+                steps in your scan history.
+              </p>
+            </div>
+            <div className="relative hidden min-h-64 lg:block">
+              <Image
+                src="https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?auto=format&fit=crop&w=900&q=80"
+                alt="Plant leaves prepared for diagnosis"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-soil/70 to-transparent" />
+            </div>
+          </div>
+        </section>
       </AnimatedContainer>
 
-      {/* 📸 Upload */}
-      <UploadDropzone onResult={handleNewScan} />
+      <UploadDropzone onResult={addOptimisticScan} />
 
-      {/* 🌿 History */}
       <div>
-        <h3 className="text-lg font-semibold mt-8 mb-3">Scan History</h3>
+        <h3 className="mb-3 mt-8 text-lg font-semibold">Scan History</h3>
 
-        <ScanHistoryList
-          history={history}
-          activeId={activeId}
-          setActiveId={setActiveId}
-        />
+        {loading ? (
+          <Loader label="Loading diagnosis history" />
+        ) : error ? (
+          <ErrorState message={error} onRetry={refresh} />
+        ) : (
+          <ScanHistoryList
+            history={history}
+            activeId={activeId}
+            setActiveId={setActiveId}
+          />
+        )}
       </div>
     </div>
   )

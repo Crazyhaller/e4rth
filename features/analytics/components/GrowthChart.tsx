@@ -12,6 +12,8 @@ import {
   Tooltip,
   Legend,
   Filler,
+  type ChartData,
+  type ChartOptions,
 } from 'chart.js'
 import { GrowthLog } from '@/types/plant'
 import { getGrowthLogs } from '@/features/plants/services/plants.service'
@@ -52,13 +54,10 @@ export default function GrowthChart({ plantId, refreshKey }: Props) {
 
   const labels = logs.map((log) => new Date(log.createdAt).toLocaleDateString())
 
-  const getCSSVar = (name: string) =>
-    getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  const e4rth = '#3fae68'
+  const moss = '#6b8f71'
 
-  const e4rth = getCSSVar('--color-e4rth-500')
-  const moss = getCSSVar('--color-moss')
-
-  const data = {
+  const data: ChartData<'line'> = {
     labels,
     datasets: [
       {
@@ -84,17 +83,12 @@ export default function GrowthChart({ plantId, refreshKey }: Props) {
     ],
   }
 
-  const isDark = document.documentElement.classList.contains('dark')
+  const textColor = 'hsl(var(--foreground) / 0.72)'
+  const gridColor = 'hsl(var(--border) / 0.65)'
+  const tooltipBg = 'hsl(var(--card))'
+  const tooltipText = 'hsl(var(--foreground))'
 
-  const textColor = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)'
-
-  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.08)'
-
-  const tooltipBg = isDark ? 'rgba(20,20,20,0.9)' : 'rgba(255,255,255,0.95)'
-
-  const tooltipText = isDark ? '#fff' : '#111'
-
-  const options: any = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
 
@@ -149,7 +143,7 @@ export default function GrowthChart({ plantId, refreshKey }: Props) {
   }
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/10">
+    <div className="surface p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold">Growth Analytics</h3>
 

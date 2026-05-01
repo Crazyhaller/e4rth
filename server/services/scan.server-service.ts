@@ -9,6 +9,10 @@ import { scanSchema } from '@/lib/validators/scan.validator'
 import { checkAiUsage } from '@/lib/usage/checkAiUsage'
 
 import { analyzePlantImage } from '@/lib/ai/gemini'
+import { createNotificationService } from './notification.server-service'
+import { NOTIFICATION_TYPES } from '@/lib/utils/constants'
+import { publishRealtimeEvent } from '@/lib/redis/client'
+import { REDIS_CHANNELS } from '@/websocket/events'
 
 /* =========================================
    CREATE AI SCAN
@@ -61,6 +65,20 @@ export async function createScanService({
     severity: aiResult.severity,
 
     rawResponse: aiResult,
+  })
+
+  await createNotificationService({
+    userId,
+    type: NOTIFICATION_TYPES.SCAN_COMPLETED,
+    message:
+      aiResult.disease === 'healthy'
+        ? 'Your plant scan is complete: no disease detected.'
+        : `Your plant scan found ${aiResult.disease} with ${aiResult.severity} severity.`,
+  })
+
+  await publishRealtimeEvent(REDIS_CHANNELS.SCANS, {
+    userId,
+    scan,
   })
 
   return scan

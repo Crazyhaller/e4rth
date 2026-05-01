@@ -44,9 +44,11 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Scan API error:', error)
 
-    return NextResponse.json(
-      { error: 'Failed to process scan' },
-      { status: 500 },
-    )
+    const message =
+      error instanceof Error ? error.message : 'Failed to process scan'
+
+    const status = message.includes('limit') ? 403 : 500
+
+    return NextResponse.json({ error: message }, { status })
   }
 }

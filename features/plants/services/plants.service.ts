@@ -1,17 +1,12 @@
 import type { Plant, CarePlan, GrowthLog } from '@/types/plant'
+import { apiRequest } from '@/lib/api/client'
 
 /* =========================================
    GET ALL PLANTS
 ========================================= */
 
 export async function getPlants() {
-  const res = await fetch('/api/plants')
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch plants')
-  }
-
-  return (await res.json()) as Plant[]
+  return apiRequest<Plant[]>('/api/plants')
 }
 
 /* =========================================
@@ -19,13 +14,7 @@ export async function getPlants() {
 ========================================= */
 
 export async function getPlant(plantId: string) {
-  const res = await fetch(`/api/plants/${plantId}`)
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch plant')
-  }
-
-  return (await res.json()) as Plant
+  return apiRequest<Plant>(`/api/plants/${plantId}`)
 }
 
 /* =========================================
@@ -38,23 +27,10 @@ export async function createPlant(body: {
   location?: string
   tags?: string[]
 }) {
-  const res = await fetch('/api/plants/create', {
+  return apiRequest<Plant>('/api/plants/create', {
     method: 'POST',
-
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
-    body: JSON.stringify(body),
+    body,
   })
-
-  if (!res.ok) {
-    const error = await res.json()
-
-    throw new Error(error.error || 'Failed to create plant')
-  }
-
-  return (await res.json()) as Plant
 }
 
 /* =========================================
@@ -62,21 +38,10 @@ export async function createPlant(body: {
 ========================================= */
 
 export async function updatePlant(plantId: string, body: Partial<Plant>) {
-  const res = await fetch(`/api/plants/${plantId}`, {
+  return apiRequest<Plant>(`/api/plants/${plantId}`, {
     method: 'PATCH',
-
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
-    body: JSON.stringify(body),
+    body,
   })
-
-  if (!res.ok) {
-    throw new Error('Failed to update plant')
-  }
-
-  return (await res.json()) as Plant
 }
 
 /* =========================================
@@ -84,15 +49,9 @@ export async function updatePlant(plantId: string, body: Partial<Plant>) {
 ========================================= */
 
 export async function deletePlant(plantId: string) {
-  const res = await fetch(`/api/plants/${plantId}`, {
+  return apiRequest<{ success: true }>(`/api/plants/${plantId}`, {
     method: 'DELETE',
   })
-
-  if (!res.ok) {
-    throw new Error('Failed to delete plant')
-  }
-
-  return res.json()
 }
 
 /* =========================================
@@ -100,13 +59,7 @@ export async function deletePlant(plantId: string) {
 ========================================= */
 
 export async function getCarePlan(plantId: string) {
-  const res = await fetch(`/api/plants/${plantId}/care-plan`)
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch care plan')
-  }
-
-  return (await res.json()) as CarePlan
+  return apiRequest<CarePlan>(`/api/plants/${plantId}/care-plan`)
 }
 
 /* =========================================
@@ -114,23 +67,10 @@ export async function getCarePlan(plantId: string) {
 ========================================= */
 
 export async function generateCarePlan(plantId: string) {
-  const res = await fetch('/api/ai/care-plan', {
+  return apiRequest<CarePlan>('/api/ai/care-plan', {
     method: 'POST',
-
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
-    body: JSON.stringify({
-      plantId,
-    }),
+    body: { plantId },
   })
-
-  if (!res.ok) {
-    throw new Error('Failed to generate care plan')
-  }
-
-  return (await res.json()) as CarePlan
 }
 
 /* =========================================
@@ -138,11 +78,18 @@ export async function generateCarePlan(plantId: string) {
 ========================================= */
 
 export async function getGrowthLogs(plantId: string) {
-  const res = await fetch(`/api/logs/${plantId}`)
+  return apiRequest<GrowthLog[]>(`/api/logs/${plantId}`)
+}
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch growth logs')
-  }
-
-  return (await res.json()) as GrowthLog[]
+export async function createGrowthLog(body: {
+  plantId: string
+  height: number | null
+  leafCount: number | null
+  healthScore: number | null
+  notes: string | null
+}) {
+  return apiRequest<GrowthLog>('/api/logs/add', {
+    method: 'POST',
+    body,
+  })
 }

@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 
 import { plants, chats } from '@/lib/db/schema'
 
-import { eq } from 'drizzle-orm'
+import { asc, eq } from 'drizzle-orm'
 
 import { checkAiUsage } from '@/lib/usage/checkAiUsage'
 
@@ -123,7 +123,7 @@ export async function aiChatService({
    */
 
   const prompt = `
-You are VerdantAI — a premium plant care assistant.
+You are E4rth — a premium plant care assistant.
 
 User plants:
 ${context}
@@ -174,4 +174,11 @@ Rules:
   return {
     response,
   }
+}
+
+export async function getChatHistoryService(userId: string) {
+  return db.query.chats.findMany({
+    where: eq(chats.userId, userId),
+    orderBy: [asc(chats.createdAt)],
+  })
 }

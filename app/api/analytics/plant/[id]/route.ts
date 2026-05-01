@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-
+import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 import { getPlantAnalyticsService } from '@/server/services/analytics.server-service'
 
 /**
@@ -7,16 +7,21 @@ import { getPlantAnalyticsService } from '@/server/services/analytics.server-ser
  */
 export async function GET(
   req: Request,
-  {
-    params,
-  }: {
-    params: {
-      id: string
-    }
-  },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const analytics = await getPlantAnalyticsService(params.id)
+    const user = await getCurrentUser()
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { id } = await params
+
+    const analytics = await getPlantAnalyticsService({
+      userId: user.id,
+      plantId: id,
+    })
 
     return NextResponse.json(analytics)
   } catch (error) {

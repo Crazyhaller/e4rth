@@ -4,6 +4,17 @@ import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
+interface ClerkWebhookEvent {
+  type: 'user.created' | 'user.updated' | 'user.deleted' | string
+  data: {
+    id: string
+    email_addresses?: Array<{ email_address?: string }>
+    first_name?: string | null
+    last_name?: string | null
+    image_url?: string | null
+  }
+}
+
 /**
  * Clerk Webhook Handler
  */
@@ -29,14 +40,14 @@ export async function POST(req: Request) {
   // Verify webhook
   const wh = new Webhook(WEBHOOK_SECRET)
 
-  let event: any
+  let event: ClerkWebhookEvent
 
   try {
     event = wh.verify(payload, {
       'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
-    })
+    }) as ClerkWebhookEvent
   } catch (err) {
     console.error('Webhook verification failed', err)
     return new Response('Invalid signature', { status: 400 })
@@ -52,7 +63,7 @@ export async function POST(req: Request) {
       case 'user.created': {
         await db.insert(users).values({
           clerkId: data.id,
-          email: data.email_addresses?.[0]?.email_address,
+          email: data.email_addresses?.[0]?.email_address ?? '',
           name: `${data.first_name ?? ''} ${data.last_name ?? ''}`.trim(),
           imageUrl: data.image_url,
         })

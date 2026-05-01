@@ -1,17 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { Leaf, Menu, X } from 'lucide-react'
 import { useUser } from '@clerk/nextjs'
+import ThemeToggle from '@/components/shared/ThemeToggle'
 
 const navLinks = [
   { label: 'Features', href: '#features' },
+  { label: 'Platform', href: '#platform' },
+  { label: 'Intelligence', href: '#intelligence' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
 ]
 
 export default function Navbar() {
@@ -32,66 +32,77 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? 'glass border-b border-white/10' : 'bg-transparent'
-      }`}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
+      className="fixed left-0 top-0 z-50 w-full px-4 pt-4"
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* 🌿 Logo */}
-        {/* on hover the logo link should pop up and increase its size */}
+      <div
+        className={`mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full border px-4 shadow-soft backdrop-blur-2xl transition-all duration-300 ${
+          scrolled
+            ? 'border-border/80 bg-card/82'
+            : 'border-white/20 bg-card/45'
+        }`}
+      >
         <Link
           href="/"
-          className="flex items-center gap-2 hover:scale-105 transition-transform"
+          className="flex items-center gap-2 rounded-full px-2 py-1 transition hover:scale-[1.02]"
         >
-          <FontAwesomeIcon icon={faLeaf} className="text-e4rth-500 text-xl" />
-          <span className="font-semibold text-lg tracking-tight">E4rth</span>
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-e4rth text-primary-foreground shadow-glow">
+            <Leaf className="h-4 w-4" />
+          </span>
+          <span className="font-semibold tracking-tight">E4rth</span>
         </Link>
 
-        {/* 🌿 Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden items-center gap-7 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="text-sm text-foreground/80 hover:text-primary transition-colors"
+              className="text-sm text-foreground/70 transition hover:text-foreground"
             >
               {link.label}
             </Link>
           ))}
+        </div>
 
-          {/* CTA */}
+        <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <Link
             href={isSignedIn ? '/dashboard' : '/sign-in'}
-            className="px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow hover:opacity-90 transition"
+            className="btn-primary"
           >
             {isSignedIn ? 'Dashboard' : 'Get Started'}
           </Link>
         </div>
 
-        {/* 🌿 Mobile Toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-foreground"
-        >
-          ☰
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen((open) => !open)}
+            className="grid h-10 w-10 place-items-center rounded-full border border-border/70 bg-card/70 hover:cursor-pointer "
+            aria-label="Toggle navigation"
+          >
+            {mobileOpen ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <Menu className="h-4 w-4" />
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* 🌿 Mobile Menu */}
       {mobileOpen && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden px-6 pb-6 pt-2 glass"
+          className="mx-auto mt-3 max-w-7xl rounded-3xl border border-border/70 bg-card/95 p-4 shadow-glass backdrop-blur-2xl md:hidden"
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-foreground/80 hover:text-primary transition"
+                className="rounded-2xl px-4 py-3 text-sm text-foreground/75 transition hover:bg-primary/10 hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -99,7 +110,7 @@ export default function Navbar() {
 
             <Link
               href={isSignedIn ? '/dashboard' : '/sign-in'}
-              className="mt-2 px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-center shadow-glow"
+              className="btn-primary mt-2"
             >
               {isSignedIn ? 'Dashboard' : 'Get Started'}
             </Link>

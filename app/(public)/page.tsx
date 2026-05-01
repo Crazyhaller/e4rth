@@ -1,101 +1,151 @@
 'use client'
 
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion } from 'motion/react'
+import {
+  Activity,
+  ArrowRight,
+  Bell,
+  Brain,
+  Camera,
+  ChartSpline,
+  CheckCircle2,
+  Clock,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react'
+import AnimatedContainer from '@/components/shared/AnimatedContainer'
 import PageWrapper from '@/components/shared/PageWrapper'
 import SectionWrapper from '@/components/shared/SectionWrapper'
-import AnimatedContainer from '@/components/shared/AnimatedContainer'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faLeaf,
-  faRobot,
-  faChartLine,
-  faBell,
-  faSeedling,
-  faComments,
-  faStar,
-} from '@fortawesome/free-solid-svg-icons'
-import Image from 'next/image'
+
+const heroImage =
+  'https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=1600&q=85'
+const labImage =
+  'https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?auto=format&fit=crop&w=1400&q=85'
+const careImage =
+  'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=1400&q=85'
+const greenhouseImage =
+  'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=85'
 
 export default function HomePage() {
   return (
     <PageWrapper withAmbient>
-      {/* 🌿 HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center justify-center text-center">
-        <div className="absolute inset-0 bg-ambient opacity-60 pointer-events-none" />
-
-        <motion.div
-          className="absolute w-125 h-125 rounded-full blur-3xl opacity-30 bg-gradient-e4rth"
-          animate={{ y: [0, -30, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
+      <section className="relative min-h-[96vh] pt-28">
+        <div className="grid min-h-[calc(96vh-7rem)] items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
           <AnimatedContainer>
-            <div className="inline-block mb-6 px-4 py-1 text-sm rounded-full glass border border-white/20">
-              🌿 AI-powered plant intelligence
+            <div className="max-w-3xl">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-4 py-2 text-sm text-foreground/70 shadow-soft backdrop-blur-xl">
+                <Sparkles className="h-4 w-4 text-primary" />
+                AI plant intelligence for serious growers
+              </div>
+
+              <h1 className="text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl">
+                E4rth turns plant care into a{' '}
+                <span className="text-gradient">
+                  living intelligence system.
+                </span>
+              </h1>
+
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-foreground/70 md:text-xl">
+                Diagnose disease from images, generate species-aware care plans,
+                track growth trends, and receive live reminders inside one
+                polished botanical operating system.
+              </p>
+
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Link href="/sign-up" className="btn-primary">
+                  Start Your Greenhouse
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+                <Link href="/dashboard" className="btn-secondary">
+                  View Product
+                </Link>
+              </div>
+
+              <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3">
+                {heroStats.map((stat) => (
+                  <div key={stat.label} className="surface p-4">
+                    <p className="text-2xl font-semibold">{stat.value}</p>
+                    <p className="mt-1 text-xs leading-5 text-foreground/55">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </AnimatedContainer>
 
-          <AnimatedContainer delay={0.1}>
-            <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight">
-              Understand Your Plants{' '}
-              <span className="text-gradient">Like Never Before</span>
-            </h1>
-          </AnimatedContainer>
+          <AnimatedContainer delay={0.12}>
+            <div className="relative">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/70 shadow-glass">
+                <Image
+                  src={heroImage}
+                  alt="Botanical greenhouse with lush leaves"
+                  fill
+                  priority
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-soil/75 via-soil/10 to-transparent" />
+                <div className="absolute bottom-5 left-5 right-5 rounded-3xl border border-white/20 bg-black/28 p-5 text-white backdrop-blur-xl">
+                  <p className="text-sm text-white/70">Live diagnosis</p>
+                  <div className="mt-3 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-lg font-semibold">
+                        Monstera adansonii
+                      </p>
+                      <p className="mt-1 text-sm text-white/72">
+                        Healthy growth detected. Humidity can improve by 8%.
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-leaf/90 px-3 py-1 text-sm font-semibold text-soil">
+                      92%
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-          <AnimatedContainer delay={0.2}>
-            <p className="mt-6 text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto">
-              Diagnose diseases, generate care plans, and track growth — all
-              powered by AI. E4rth turns plant care into a precise, intelligent
-              experience.
-            </p>
-          </AnimatedContainer>
-
-          <AnimatedContainer delay={0.3}>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/sign-up"
-                className="px-8 py-3 rounded-2xl bg-gradient-e4rth text-white font-medium shadow-glow hover:opacity-90 transition"
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="absolute -left-6 top-16 hidden w-56 rounded-3xl border border-border/70 bg-card/90 p-4 shadow-glass backdrop-blur-xl md:block"
               >
-                Start for Free
-              </Link>
-
-              <Link
-                href="#features"
-                className="px-8 py-3 rounded-2xl border border-white/20 text-foreground/80 hover:bg-white/10 transition"
-              >
-                Explore Features
-              </Link>
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-2xl bg-primary/15 text-primary">
+                    <Camera className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold">Scan Complete</p>
+                    <p className="text-xs text-foreground/55">
+                      3 steps suggested
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </AnimatedContainer>
         </div>
       </section>
 
-      {/* 🌿 FEATURES SECTION */}
       <SectionWrapper
-        title="Everything Your Plants Need"
-        subtitle="From AI diagnosis to intelligent care plans and real-time insights — E4rth brings precision and simplicity together."
+        title="A premium command center for every plant decision"
+        subtitle="E4rth combines diagnostics, care orchestration, timeline tracking, reminders, and conversational AI into a single high-trust interface."
         centered
-        className="pt-10"
+        className="pt-12"
       >
-        <div
-          id="features"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
+        <div id="features" className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {features.map((feature, index) => (
-            <AnimatedContainer key={feature.title} delay={index * 0.1}>
-              <div className="group p-6 rounded-2xl glass border border-white/10 hover:border-primary/40 transition-all hover:shadow-glow">
-                {/* Icon */}
-                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-e4rth-500/10 text-e4rth-500 mb-4 text-xl">
+            <AnimatedContainer key={feature.title} delay={index * 0.05}>
+              <div className="surface group h-full p-5 premium-ring transition hover:-translate-y-1 hover:border-primary/45">
+                <div className="mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-primary/12 text-primary">
                   {feature.icon}
                 </div>
-
-                {/* Title */}
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-
-                {/* Description */}
-                <p className="text-sm text-foreground/70 leading-relaxed">
+                <h3 className="text-lg font-semibold">{feature.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-foreground/64">
                   {feature.description}
                 </p>
               </div>
@@ -104,162 +154,175 @@ export default function HomePage() {
         </div>
       </SectionWrapper>
 
-      {/* 🌿 PRODUCT SHOWCASE */}
-      <SectionWrapper
-        title="A Beautiful, Intelligent Plant Dashboard"
-        subtitle="Experience a seamless interface designed to make plant care intuitive, visual, and deeply engaging."
-        centered
-      >
-        <div className="relative mt-10">
-          {/* Background Glow */}
-          <div className="absolute inset-0 bg-ambient opacity-40 pointer-events-none" />
+      <SectionWrapper className="pt-10">
+        <div
+          id="platform"
+          className="grid items-center gap-8 rounded-[2rem] border border-border/70 bg-card/60 p-5 shadow-glass backdrop-blur-xl lg:grid-cols-[0.95fr_1.05fr] lg:p-8"
+        >
+          <div className="relative aspect-[5/4] overflow-hidden rounded-[1.5rem]">
+            <Image
+              src={labImage}
+              alt="Careful plant inspection with botanical leaves"
+              fill
+              className="object-cover"
+            />
+          </div>
 
-          <AnimatedContainer>
-            <div className="relative mx-auto max-w-5xl">
-              {/* Main Dashboard Card */}
-              <div className="glass rounded-2xl p-6 border border-white/10 shadow-glass">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold">Your Plant Overview</h3>
-                  <span className="text-sm text-foreground/60">
-                    Last updated: Today
+          <div className="p-2 lg:p-6">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-primary">
+              Intelligent diagnosis
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
+              Upload a leaf. Receive a confident, explainable care path.
+            </h2>
+            <p className="mt-5 text-base leading-8 text-foreground/68">
+              The diagnosis flow is designed for trust: image preview, plant
+              linking, severity, confidence, treatment steps, saved history, and
+              realtime completion alerts. It feels less like a form and more
+              like an AI horticulture consultation.
+            </p>
+
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              {diagnosisPoints.map((point) => (
+                <div
+                  key={point}
+                  className="flex gap-3 rounded-2xl border border-border/70 bg-background/45 p-4"
+                >
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <span className="text-sm leading-6 text-foreground/70">
+                    {point}
                   </span>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </SectionWrapper>
 
-                {/* Mock Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {stats.map((stat) => (
+      <SectionWrapper
+        title="Built like a SaaS product, not a plant journal"
+        subtitle="Every screen is optimized for scanning, action, and calm confidence: dense enough for power users, clear enough for beginners."
+        centered
+      >
+        <div className="grid gap-6 lg:grid-cols-3">
+          {workflows.map((workflow) => (
+            <div key={workflow.title} className="surface overflow-hidden">
+              <div className="relative h-56">
+                <Image
+                  src={workflow.image}
+                  alt={workflow.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-soil/80 to-transparent" />
+                <div className="absolute bottom-4 left-4 rounded-full bg-cream/90 px-3 py-1 text-xs font-medium text-soil">
+                  {workflow.kicker}
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold">{workflow.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-foreground/65">
+                  {workflow.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionWrapper>
+
+      <SectionWrapper className="pt-8">
+        <div id="intelligence" className="grid gap-8 lg:grid-cols-[1fr_420px]">
+          <div className="surface p-6 lg:p-8">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-primary">
+              Realtime intelligence
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
+              A living timeline of every scan, reminder, care plan, and growth
+              signal.
+            </h2>
+            <p className="mt-5 text-base leading-8 text-foreground/68">
+              The backend architecture already supports AI services,
+              repositories, notifications, Redis optimization, and realtime
+              pathways. The frontend now surfaces that complexity as a refined
+              botanical control room: gentle alerts, clear charts, fast actions,
+              and crisp empty states.
+            </p>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {systemCards.map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-3xl border border-border/70 bg-background/45 p-5"
+                >
+                  <div className="mb-4 text-primary">{card.icon}</div>
+                  <h3 className="font-semibold">{card.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-foreground/62">
+                    {card.copy}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="surface overflow-hidden">
+            <div className="relative h-full min-h-[520px]">
+              <Image
+                src={greenhouseImage}
+                alt="E4rth greenhouse leaves"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-soil/88 via-soil/25 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <p className="text-sm text-white/72">Portfolio snapshot</p>
+                <div className="mt-4 space-y-3">
+                  {snapshotRows.map((row) => (
                     <div
-                      key={stat.label}
-                      className="p-4 rounded-xl bg-white/5 border border-white/10"
+                      key={row.label}
+                      className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl"
                     >
-                      <p className="text-sm text-foreground/60">{stat.label}</p>
-                      <p className="text-xl font-semibold mt-1">{stat.value}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-white/76">
+                          {row.label}
+                        </span>
+                        <span className="font-semibold">{row.value}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
-
-                {/* Fake Chart Area */}
-                <div className="mt-6 h-40 rounded-xl bg-gradient-earth flex items-center justify-center text-sm text-white/70">
-                  Growth Analytics Preview
-                </div>
               </div>
-
-              {/* Floating Card */}
-              <motion.div
-                className="absolute -bottom-10 -right-6 w-64 glass rounded-xl p-4 border border-white/10 shadow-glass"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 6, repeat: Infinity }}
-              >
-                <p className="text-sm text-foreground/60 mb-1">AI Insight</p>
-                <p className="text-sm font-medium">
-                  Your Monstera needs watering tomorrow 🌱
-                </p>
-              </motion.div>
             </div>
-          </AnimatedContainer>
+          </div>
         </div>
       </SectionWrapper>
 
-      {/* Testimonials */}
-      <SectionWrapper
-        title="Loved by Plant Enthusiasts"
-        subtitle="From beginners to experienced growers, E4rth helps people care for plants with confidence and precision."
-        centered
-      >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <AnimatedContainer key={t.name} delay={i * 0.1}>
-              <div className="glass rounded-2xl p-6 border border-white/10 hover:border-primary/40 transition-all hover:shadow-glow">
-                {/* ⭐ Rating */}
-                <div className="flex gap-1 text-e4rth-400 mb-3">
-                  {Array.from({ length: 5 }).map((_, idx) => (
-                    <FontAwesomeIcon key={idx} icon={faStar} />
-                  ))}
-                </div>
-
-                {/* 💬 Quote */}
-                <p className="text-sm text-foreground/80 leading-relaxed mb-6">
-                  “{t.quote}”
-                </p>
-
-                {/* 👤 User */}
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={t.image}
-                    alt={t.name}
-                    width={40}
-                    height={40}
-                    className="w-10 h-10 rounded-full object-cover border border-white/20"
-                  />
-                  <div>
-                    <p className="text-sm font-medium">{t.name}</p>
-                    <p className="text-xs text-foreground/60">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            </AnimatedContainer>
-          ))}
-        </div>
-
-        {/* 🌿 Logos / Trust Strip */}
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-10 opacity-70">
-          {brands.map((brand) => (
-            <span
-              key={brand}
-              className="text-sm text-foreground/60 tracking-wide"
-            >
-              {brand}
-            </span>
-          ))}
-        </div>
-      </SectionWrapper>
-
-      {/* CTA */}
-      <SectionWrapper className="pb-24">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 glass p-10 md:p-16 text-center">
-          {/* 🌿 Ambient Glow */}
-          <div className="absolute inset-0 bg-ambient opacity-40 pointer-events-none" />
-
-          {/* 🌫️ Floating Orb */}
-          <motion.div
-            className="absolute w-100 h-100 rounded-full blur-3xl opacity-30 bg-gradient-e4rth"
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 7, repeat: Infinity }}
-          />
-
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <AnimatedContainer>
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
-                Give Your Plants the Intelligence{' '}
-                <span className="text-gradient">They Deserve</span>
+      <SectionWrapper className="pb-28">
+        <div className="overflow-hidden rounded-[2rem] border border-border/70 bg-gradient-e4rth shadow-glass">
+          <div className="grid items-center gap-8 p-8 text-primary-foreground lg:grid-cols-[1fr_0.72fr] lg:p-12">
+            <div>
+              <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
+                Make every plant feel managed, understood, and alive.
               </h2>
-            </AnimatedContainer>
-
-            <AnimatedContainer delay={0.1}>
-              <p className="mt-4 text-foreground/70 text-base md:text-lg">
-                Join thousands of plant lovers using E4rth to diagnose, care,
-                and grow with confidence.
+              <p className="mt-5 max-w-2xl text-base leading-8 text-primary-foreground/76">
+                E4rth is ready to impress: premium UI, deep architecture, AI
+                diagnosis, care planning, analytics, realtime alerts, and a calm
+                visual system that feels expensive without feeling loud.
               </p>
-            </AnimatedContainer>
-
-            <AnimatedContainer delay={0.2}>
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href="/sign-up"
-                  className="px-8 py-3 rounded-2xl bg-gradient-e4rth text-white font-medium shadow-glow hover:opacity-90 transition"
-                >
-                  Start Free Today
-                </Link>
-
-                <Link
-                  href="/pricing"
-                  className="px-8 py-3 rounded-2xl border border-white/20 text-foreground/80 hover:bg-white/10 transition"
-                >
-                  View Pricing
-                </Link>
-              </div>
-            </AnimatedContainer>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center justify-center rounded-full bg-cream px-5 py-3 text-sm font-semibold text-soil transition hover:-translate-y-0.5"
+              >
+                Start Free
+              </Link>
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center rounded-full border border-white/25 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+              >
+                Explore Plans
+              </Link>
+            </div>
           </div>
         </div>
       </SectionWrapper>
@@ -267,82 +330,92 @@ export default function HomePage() {
   )
 }
 
-/* 🌿 FEATURES DATA */
+const heroStats = [
+  { value: '92%', label: 'AI confidence visibility' },
+  { value: '24/7', label: 'Realtime plant alerts' },
+  { value: '6+', label: 'Connected care systems' },
+]
+
 const features = [
   {
     title: 'AI Disease Diagnosis',
     description:
-      'Upload a plant image and instantly detect diseases with confidence scores and treatment suggestions.',
-    icon: <FontAwesomeIcon icon={faLeaf} />,
+      'Image-based diagnosis with confidence, severity, treatment steps, saved scan history, and plant linking.',
+    icon: <Camera className="h-5 w-5" />,
   },
   {
-    title: 'Smart Care Plans',
+    title: 'Care Plan Generation',
     description:
-      'Get AI-generated watering, sunlight, and fertilizer schedules tailored to your plant’s needs.',
-    icon: <FontAwesomeIcon icon={faRobot} />,
+      'Species-aware watering, sunlight, fertilizer, and notes generated through the service layer.',
+    icon: <Brain className="h-5 w-5" />,
   },
   {
     title: 'Growth Analytics',
     description:
-      'Track plant health, monitor growth patterns, and visualize trends over time.',
-    icon: <FontAwesomeIcon icon={faChartLine} />,
+      'Health trends, portfolio KPIs, lifecycle events, and charts styled for both executive clarity and daily care.',
+    icon: <ChartSpline className="h-5 w-5" />,
   },
   {
-    title: 'Real-Time Alerts',
+    title: 'Realtime Alerts',
     description:
-      'Never miss watering or care routines with intelligent reminders and alerts.',
-    icon: <FontAwesomeIcon icon={faBell} />,
-  },
-  {
-    title: 'Plant Lifecycle Tracking',
-    description:
-      'Maintain a complete history of your plant’s growth, recovery, and changes.',
-    icon: <FontAwesomeIcon icon={faSeedling} />,
-  },
-  {
-    title: 'AI Plant Assistant',
-    description:
-      'Ask anything about your plants and get contextual, intelligent answers instantly.',
-    icon: <FontAwesomeIcon icon={faComments} />,
+      'Live notifications, scan completion events, reminders, and settings built into the dashboard shell.',
+    icon: <Bell className="h-5 w-5" />,
   },
 ]
 
-/* 🌱 Product MOCK DATA */
-const stats = [
-  { label: 'Plants', value: '12' },
-  { label: 'Healthy', value: '10' },
-  { label: 'Needs Care', value: '2' },
-  { label: 'Alerts', value: '3' },
+const diagnosisPoints = [
+  'Preview image before submission',
+  'Attach scans to existing plants',
+  'Store history and treatment details',
+  'Trigger realtime completion alerts',
 ]
 
-/* 🌿 TESTIMONIAL DATA */
-const testimonials = [
+const workflows = [
   {
-    name: 'Ananya Sharma',
-    role: 'Urban Gardener',
-    quote:
-      'E4rth completely changed how I care for my plants. The AI diagnosis is shockingly accurate.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
+    kicker: 'Care OS',
+    title: 'Plant profiles with care history',
+    description:
+      'Each plant becomes a living record: species, tags, location, care plan, growth logs, scan results, and AI-backed insights.',
+    image: careImage,
   },
   {
-    name: 'Rohit Mehta',
-    role: 'Plant Collector',
-    quote:
-      'The care plans and reminders make it effortless. I’ve never had healthier plants.',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
+    kicker: 'Analytics',
+    title: 'Executive-grade plant health visibility',
+    description:
+      'The analytics layer translates raw logs and scans into health scores, trends, alerts, and timeline signals that are easy to act on.',
+    image:
+      'https://images.unsplash.com/photo-1773294181678-ad51abbbc510?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
-    name: 'Sarah Williams',
-    role: 'Home Decor Enthusiast',
-    quote:
-      'Beautiful interface, powerful features. It feels like a premium product in every way.',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80',
+    kicker: 'Assistant',
+    title: 'A botanical AI companion',
+    description:
+      'Markdown responses, prompt chips, typing states, and persisted history make the chat feel useful instead of ornamental.',
+    image:
+      'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=85',
   },
 ]
 
-/* 🌱 TRUST LABELS */
-const brands = [
-  'Trusted by 10,000+ plant lovers',
-  'AI-powered insights',
-  'Built for modern plant care',
+const systemCards = [
+  {
+    title: 'Service Layer',
+    copy: 'Business logic, AI orchestration, validation, and notifications remain centralized.',
+    icon: <ShieldCheck className="h-5 w-5" />,
+  },
+  {
+    title: 'Redis Optimized',
+    copy: 'AI responses and realtime pathways are structured for caching and event delivery.',
+    icon: <Activity className="h-5 w-5" />,
+  },
+  {
+    title: 'User Calm',
+    copy: 'Every major state has clear loading, empty, error, and success feedback.',
+    icon: <Clock className="h-5 w-5" />,
+  },
+]
+
+const snapshotRows = [
+  { label: 'Plants tracked', value: '128' },
+  { label: 'Care actions automated', value: '2.4k' },
+  { label: 'AI chats resolved', value: '8.9k' },
 ]

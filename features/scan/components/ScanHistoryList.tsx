@@ -1,8 +1,10 @@
 'use client'
 
 import AnimatedContainer from '@/components/shared/AnimatedContainer'
+import EmptyState from '@/components/feedback/EmptyState'
+import type { Scan } from '@/types/scan'
 import DiagnosisResultCard from './DiagnosisResultCard'
-import { Scan } from '@/types/scan'
+import ScanHistoryItem from './ScanHistoryItem'
 
 interface Props {
   history: Scan[]
@@ -16,7 +18,12 @@ export default function ScanHistoryList({
   setActiveId,
 }: Props) {
   if (history.length === 0) {
-    return <div className="text-sm text-foreground/60">No scans yet.</div>
+    return (
+      <EmptyState
+        title="No scans yet"
+        description="Upload a plant photo to start building diagnosis history."
+      />
+    )
   }
 
   return (
@@ -25,35 +32,17 @@ export default function ScanHistoryList({
         const isActive = activeId === scan.id
 
         return (
-          <AnimatedContainer key={scan.id} delay={i * 0.05}>
+          <AnimatedContainer key={scan.id} delay={i * 0.04}>
             <div className="space-y-3">
-              {/* 📄 Item */}
-              <div
-                onClick={() => setActiveId(isActive ? null : scan.id)}
-                className="glass rounded-xl p-4 border border-white/10 cursor-pointer hover:shadow-glow transition"
-              >
-                <p className="text-sm font-medium">
-                  {scan.disease === 'healthy' ? 'Healthy 🌱' : scan.disease}
-                </p>
+              <ScanHistoryItem
+                scan={scan}
+                active={isActive}
+                onToggle={() => setActiveId(isActive ? null : scan.id)}
+              />
 
-                <p className="text-xs text-foreground/60">
-                  Confidence: {scan.confidence}%
-                </p>
-
-                <p className="text-xs text-foreground/50 mt-1">
-                  {new Date(scan.createdAt).toLocaleString()}
-                </p>
-              </div>
-
-              {/* 🧠 Inline Result */}
               {isActive && (
                 <div className="pl-2">
-                  <DiagnosisResultCard
-                    data={{
-                      ...scan,
-                      severity: scan.severity as 'low' | 'medium' | 'high',
-                    }}
-                  />
+                  <DiagnosisResultCard data={scan} />
                 </div>
               )}
             </div>

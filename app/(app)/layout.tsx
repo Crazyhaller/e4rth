@@ -4,15 +4,13 @@ import DashboardHeader from '@/components/layout/DashboardHeader'
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
+    <div className="flex min-h-screen bg-ambient">
       <Sidebar />
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         <DashboardHeader />
 
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-4 pt-20 lg:p-8">{children}</main>
       </div>
     </div>
   )

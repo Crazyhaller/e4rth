@@ -2,13 +2,29 @@ import { db } from '@/lib/db'
 
 import { growthLogs, notifications, plants, scans } from '@/lib/db/schema'
 
-import { avg, count, desc, eq } from 'drizzle-orm'
+import { and, avg, count, desc, eq, inArray, isNotNull } from 'drizzle-orm'
+import { getPlantById } from '../repositories/plant.repo'
 
 /* =========================================
    PLANT ANALYTICS
 ========================================= */
 
-export async function getPlantAnalyticsService(plantId: string) {
+export async function getPlantAnalyticsService({
+  userId,
+  plantId,
+}: {
+  userId: string
+  plantId: string
+}) {
+  const plant = await getPlantById({
+    userId,
+    plantId,
+  })
+
+  if (!plant) {
+    throw new Error('Plant not found')
+  }
+
   /**
    * 📈 Growth logs
    */
@@ -94,7 +110,34 @@ export async function getGlobalAnalyticsService(userId: string) {
       count: count(),
     })
     .from(scans)
-    .where(eq(scans.severity, 'low'))
+    .where(and(eq(scans.userId, userId), eq(scans.severity, 'low')))
+
+  const unreadNotifications = await db
+    .select({
+      count: count(),
+    })
+    .from(notifications)
+    .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)))
+
+  const userPlants = await db.query.plants.findMany({
+    where: eq(plants.userId, userId),
+  })
+
+  const plantIds = userPlants.map((plant) => plant.id)
+
+  const healthRows = plantIds.length
+    ? await db
+        .select({
+          value: avg(growthLogs.healthScore),
+        })
+        .from(growthLogs)
+        .where(
+          and(
+            inArray(growthLogs.plantId, plantIds),
+            isNotNull(growthLogs.healthScore),
+          ),
+        )
+    : [{ value: 0 }]
 
   return {
     totalPlants: totalPlants[0]?.count ?? 0,
@@ -104,5 +147,9 @@ export async function getGlobalAnalyticsService(userId: string) {
     totalNotifications: totalNotifications[0]?.count ?? 0,
 
     healthyPlants: healthyPlants[0]?.count ?? 0,
+
+    unreadNotifications: unreadNotifications[0]?.count ?? 0,
+
+    averageHealthScore: Number(healthRows[0]?.value ?? 0),
   }
 }

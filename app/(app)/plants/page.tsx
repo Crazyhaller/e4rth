@@ -1,75 +1,45 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import AnimatedContainer from '@/components/shared/AnimatedContainer'
-import AddPlantModal from '@/features/plants/components/AddPlantModal'
+import Image from 'next/image'
 import Link from 'next/link'
-import { getPlants } from '@/features/plants/services/plants.service'
+import { MapPin, Plus, Search, Sparkles } from 'lucide-react'
+import { useState } from 'react'
+import AnimatedContainer from '@/components/shared/AnimatedContainer'
+import EmptyState from '@/components/feedback/EmptyState'
+import ErrorState from '@/components/feedback/ErrorState'
+import AddPlantModal from '@/features/plants/components/AddPlantModal'
+import { usePlants } from '@/features/plants/hooks/usePlants'
 
-type Plant = {
-  id: string
-  name: string
-  species?: string | null
-  location?: string | null
-  tags?: string[] | null
-}
+const plantImages = [
+  'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1598880940080-ff9a29891b85?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=900&q=80',
+]
 
 export default function PlantsPage() {
-  const [plants, setPlants] = useState<Plant[]>([])
-  const [loading, setLoading] = useState(true)
   const [openModal, setOpenModal] = useState(false)
+  const { plants, loading, error, refreshPlants } = usePlants()
 
-  const fetchPlants = async () => {
-    try {
-      const data = await getPlants()
-      setPlants(data)
-    } catch (error) {
-      console.error('Failed to fetch plants:', error)
-    } finally {
-      setLoading(false)
-    }
+  if (error) {
+    return (
+      <ErrorState
+        title="Plant collection unavailable"
+        message={error}
+        onRetry={refreshPlants}
+      />
+    )
   }
 
-  useEffect(() => {
-    let mounted = true
-
-    const loadPlants = async () => {
-      try {
-        const data = await getPlants()
-        if (mounted) {
-          setPlants(data)
-        }
-      } catch (error) {
-        if (mounted) {
-          console.error('Failed to fetch plants:', error)
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    loadPlants()
-
-    return () => {
-      mounted = false
-    }
-  }, [])
-
-  /* =========================
-     LOADING STATE
-  ========================= */
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-10 w-40 bg-white/5 animate-pulse rounded-xl" />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="h-36 animate-pulse rounded-[2rem] bg-card/60" />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
             <div
-              key={i}
-              className="h-40 rounded-2xl bg-white/5 animate-pulse border border-white/10"
+              key={index}
+              className="h-80 animate-pulse rounded-[2rem] border border-border/70 bg-card/60"
             />
           ))}
         </div>
@@ -77,91 +47,107 @@ export default function PlantsPage() {
     )
   }
 
-  /* =========================
-     MAIN CONTENT
-  ========================= */
   return (
-    <div className="space-y-6">
-      {/* 🌿 Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold">My Plants 🌱</h2>
-          <p className="text-sm text-foreground/70 mt-1">
-            Manage and track all your plants in one place.
-          </p>
+    <div className="space-y-7">
+      <section className="surface overflow-hidden">
+        <div className="grid gap-6 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/45 px-3 py-1.5 text-xs text-foreground/58">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              Botanical portfolio
+            </div>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
+              Your living collection, beautifully organized.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-foreground/64">
+              Track species, locations, tags, care plans, growth history, and AI
+              scan results from a premium plant management workspace.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setOpenModal(true)}
+            className="btn-primary w-full md:w-auto"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Plant
+          </button>
         </div>
+      </section>
 
-        <button
-          onClick={() => setOpenModal(true)}
-          className="px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow hover:opacity-90 transition"
-        >
-          + Add Plant
-        </button>
-      </div>
-
-      {/* 🌱 EMPTY STATE */}
       {plants.length === 0 ? (
         <AnimatedContainer>
-          <div className="glass rounded-2xl p-10 text-center border border-white/10">
-            <h2 className="text-xl font-semibold mb-2">No plants yet 🌱</h2>
-            <p className="text-sm text-foreground/70">
-              Start by adding your first plant and track its growth with AI.
-            </p>
-
-            <button
-              onClick={() => setOpenModal(true)}
-              className="mt-6 px-5 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
-            >
-              Add Your First Plant
-            </button>
-          </div>
+          <EmptyState
+            title="No plants yet"
+            description="Add your first plant and E4rth will start building its care plan, timeline, and health intelligence."
+            action={
+              <button
+                onClick={() => setOpenModal(true)}
+                className="btn-primary"
+              >
+                Add Your First Plant
+              </button>
+            }
+          />
         </AnimatedContainer>
       ) : (
-        /* 🌿 GRID */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {plants.map((plant, index) => (
-            <AnimatedContainer key={plant.id} delay={index * 0.05}>
+            <AnimatedContainer key={plant.id} delay={index * 0.04}>
               <Link
                 href={`/plants/${plant.id}`}
-                className="block glass rounded-2xl p-5 border border-white/10 hover:shadow-glow transition hover:scale-[1.02]"
+                className="group block overflow-hidden rounded-[2rem] border border-border/70 bg-card/72 shadow-soft backdrop-blur-xl transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-glass"
               >
-                <h3 className="text-lg font-semibold">{plant.name}</h3>
-
-                {plant.species && (
-                  <p className="text-sm text-foreground/60 mt-1">
-                    {plant.species}
-                  </p>
-                )}
-
-                {plant.location && (
-                  <p className="text-xs text-foreground/50 mt-2">
-                    📍 {plant.location}
-                  </p>
-                )}
-
-                {plant.tags && plant.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {plant.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2 py-1 rounded-full bg-e4rth-500/10 text-e4rth-400"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div className="relative h-52 overflow-hidden">
+                  <Image
+                    src={plantImages[index % plantImages.length]}
+                    alt={plant.name}
+                    fill
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-soil/78 via-soil/10 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="text-2xl font-semibold">{plant.name}</h3>
+                    {plant.species && (
+                      <p className="mt-1 text-sm text-white/72">
+                        {plant.species}
+                      </p>
+                    )}
                   </div>
-                )}
+                </div>
+
+                <div className="p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 text-sm text-foreground/62">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      {plant.location || 'Location not set'}
+                    </div>
+                    <Search className="h-4 w-4 text-foreground/38 transition group-hover:text-primary" />
+                  </div>
+
+                  {plant.tags && plant.tags.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {plant.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs text-foreground/70"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </Link>
             </AnimatedContainer>
           ))}
         </div>
       )}
 
-      {/* 🌿 MODAL */}
       <AddPlantModal
         open={openModal}
         onClose={() => setOpenModal(false)}
-        onSuccess={fetchPlants}
+        onSuccess={refreshPlants}
       />
     </div>
   )

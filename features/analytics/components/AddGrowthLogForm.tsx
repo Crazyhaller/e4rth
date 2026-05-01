@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { notify } from '@/lib/toast'
+import { createGrowthLog } from '@/features/plants/services/plants.service'
 
 interface Props {
   plantId: string
@@ -21,18 +23,12 @@ export default function AddGrowthLogForm({ plantId, onSuccess }: Props) {
     try {
       setLoading(true)
 
-      await fetch('/api/logs/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          plantId,
-          height: Number(form.height) || null,
-          leafCount: Number(form.leafCount) || null,
-          healthScore: Number(form.healthScore) || null,
-          notes: form.notes || null,
-        }),
+      await createGrowthLog({
+        plantId,
+        height: Number(form.height) || null,
+        leafCount: Number(form.leafCount) || null,
+        healthScore: Number(form.healthScore) || null,
+        notes: form.notes || null,
       })
 
       setForm({
@@ -43,8 +39,10 @@ export default function AddGrowthLogForm({ plantId, onSuccess }: Props) {
       })
 
       onSuccess()
+      notify.success('Growth log added')
     } catch (err) {
       console.error('Add log failed:', err)
+      notify.error('Failed to add growth log')
     } finally {
       setLoading(false)
     }
@@ -92,7 +90,7 @@ export default function AddGrowthLogForm({ plantId, onSuccess }: Props) {
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow"
+        className="w-full px-4 py-2 rounded-xl bg-gradient-e4rth text-white text-sm shadow-glow hover:cursor-pointer"
       >
         {loading ? 'Saving...' : 'Add Log'}
       </button>

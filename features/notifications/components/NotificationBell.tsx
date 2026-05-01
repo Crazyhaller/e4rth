@@ -1,41 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell } from '@fortawesome/free-solid-svg-icons'
-import { motion, AnimatePresence } from 'framer-motion'
-
-interface Notification {
-  id: string
-  type: string
-  message: string
-  isRead: boolean
-  createdAt: string
-}
+import { Bell } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useNotifications } from '../hooks/useNotifications'
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false)
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  const { markAllRead, notifications, unreadCount } = useNotifications()
 
   const dropdownRef = useRef<HTMLDivElement>(null)
-
-  /* =========================
-     FETCH
-  ========================= */
-  const fetchNotifications = async () => {
-    try {
-      const res = await fetch('/api/notifications')
-      const data = await res.json()
-
-      setNotifications(data)
-    } catch (err) {
-      console.error('Notification fetch failed:', err)
-    }
-  }
-
-  useEffect(() => {
-    fetchNotifications()
-  }, [])
 
   /* =========================
      CLOSE ON OUTSIDE CLICK
@@ -57,37 +31,6 @@ export default function NotificationBell() {
     }
   }, [])
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length
-
-  const markAsRead = async () => {
-    const unread = notifications.filter((n) => !n.isRead)
-
-    if (unread.length === 0) return
-
-    const ids = unread.map((n) => n.id)
-
-    try {
-      await fetch('/api/notifications/read', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          notificationIds: ids,
-        }),
-      })
-
-      setNotifications((prev) =>
-        prev.map((n) => ({
-          ...n,
-          isRead: true,
-        })),
-      )
-    } catch (err) {
-      console.error('Mark read failed:', err)
-    }
-  }
-
   return (
     <div className="relative" ref={dropdownRef}>
       {/* 🔔 Bell */}
@@ -96,15 +39,16 @@ export default function NotificationBell() {
           setOpen((prev) => !prev)
 
           if (!open) {
-            markAsRead()
+            markAllRead()
           }
         }}
-        className="relative p-2 rounded-xl hover:bg-white/5 transition"
+        className="relative grid h-10 w-10 place-items-center rounded-full border border-border/70 bg-card/70 shadow-soft transition hover:cursor-pointer hover:bg-primary/10"
+        aria-label="Open notifications"
       >
-        <FontAwesomeIcon icon={faBell} className="text-lg" />
+        <Bell className="h-5 w-5" />
 
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-e4rth-500 text-white text-[10px] flex items-center justify-center shadow-glow">
+          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gradient-e4rth px-1 text-[10px] text-primary-foreground shadow-glow">
             {unreadCount}
           </span>
         )}
@@ -132,7 +76,7 @@ export default function NotificationBell() {
             transition={{
               duration: 0.2,
             }}
-            className="absolute right-0 mt-3 w-85 glass rounded-2xl border border-white/10 p-4 z-50"
+            className="absolute right-0 z-50 mt-3 w-[min(22rem,calc(100vw-2rem))] rounded-[1.5rem] border border-border/70 bg-card/95 p-4 shadow-glass backdrop-blur-2xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
@@ -155,8 +99,8 @@ export default function NotificationBell() {
                     key={notification.id}
                     className={`rounded-xl p-3 border transition ${
                       notification.isRead
-                        ? 'bg-white/5 border-white/5'
-                        : 'bg-e4rth-500/10 border-e4rth-500/20'
+                        ? 'border-border/60 bg-background/35'
+                        : 'border-primary/25 bg-primary/10'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -171,12 +115,14 @@ export default function NotificationBell() {
                       </div>
 
                       {!notification.isRead && (
-                        <span className="w-2 h-2 rounded-full bg-e4rth-400 mt-1.5" />
+                        <span className="mt-1.5 h-2 w-2 rounded-full bg-primary" />
                       )}
                     </div>
 
                     <p className="text-[10px] text-foreground/40 mt-3">
-                      {new Date(notification.createdAt).toLocaleString()}
+                      {notification.createdAt
+                        ? new Date(notification.createdAt).toLocaleString()
+                        : 'Just now'}
                     </p>
                   </div>
                 ))}

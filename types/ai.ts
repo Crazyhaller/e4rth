@@ -7,7 +7,7 @@ export interface DiagnosisResult {
 
   confidence: number
 
-  severity: string
+  severity: 'low' | 'medium' | 'high'
 
   treatment: string[]
 }
@@ -20,4 +20,8 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
 
   message: string
+
+  id?: string
+
+  createdAt?: string | Date | null
 }

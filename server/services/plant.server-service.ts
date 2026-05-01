@@ -17,6 +17,8 @@ import {
 } from '@/lib/validators/plant.validator'
 
 import { generateCarePlan } from '@/lib/ai/gemini'
+import { createNotificationService } from './notification.server-service'
+import { NOTIFICATION_TYPES } from '@/lib/utils/constants'
 
 /* =========================================
    CREATE PLANT
@@ -192,20 +194,63 @@ export async function getPlantCarePlanService({
    CREATE GROWTH LOG
 ========================================= */
 
-export async function createGrowthLogService(body: unknown) {
+export async function createGrowthLogService({
+  userId,
+  body,
+}: {
+  userId: string
+  body: unknown
+}) {
   const parsed = growthLogSchema.safeParse(body)
 
   if (!parsed.success) {
     throw new Error(parsed.error.issues[0].message)
   }
 
-  return createGrowthLog(parsed.data)
+  const plant = await getPlantById({
+    userId,
+    plantId: parsed.data.plantId,
+  })
+
+  if (!plant) {
+    throw new Error('Plant not found')
+  }
+
+  const log = await createGrowthLog(parsed.data)
+
+  if (
+    typeof parsed.data.healthScore === 'number' &&
+    parsed.data.healthScore < 55
+  ) {
+    await createNotificationService({
+      userId,
+      type: NOTIFICATION_TYPES.GROWTH_INSIGHT,
+      message: `${plant.name} has a low health score. Review its care routine today.`,
+    })
+  }
+
+  return log
 }
 
 /* =========================================
    GET GROWTH LOGS
 ========================================= */
 
-export async function getGrowthLogsService(plantId: string) {
+export async function getGrowthLogsService({
+  userId,
+  plantId,
+}: {
+  userId: string
+  plantId: string
+}) {
+  const plant = await getPlantById({
+    userId,
+    plantId,
+  })
+
+  if (!plant) {
+    throw new Error('Plant not found')
+  }
+
   return getPlantGrowthLogs(plantId)
 }

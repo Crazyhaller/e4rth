@@ -1,5 +1,5 @@
 CREATE TYPE "public"."chat_role" AS ENUM('user', 'assistant');--> statement-breakpoint
-CREATE TYPE "public"."notification_type" AS ENUM('watering', 'disease', 'reminder', 'system');--> statement-breakpoint
+CREATE TYPE "public"."notification_type" AS ENUM('watering', 'disease', 'reminder', 'system', 'scan_completed', 'growth_insight');--> statement-breakpoint
 CREATE TYPE "public"."plan" AS ENUM('free', 'premium');--> statement-breakpoint
 CREATE TYPE "public"."severity" AS ENUM('low', 'medium', 'high');--> statement-breakpoint
 CREATE TYPE "public"."subscription_status" AS ENUM('active', 'cancelled', 'past_due');--> statement-breakpoint
