@@ -1,13 +1,13 @@
 export const FREE_LIMITS = {
-  scansPerDay: 100,
-  chatMessagesPerDay: 200,
+  scansPerDay: 6,
+  chatMessagesPerDay: 20,
 }
 
 export const PLANS = {
   free: {
     name: 'Free',
-    scans: 100,
-    chats: 200,
+    scans: 6,
+    chats: 20,
   },
 
   premium: {

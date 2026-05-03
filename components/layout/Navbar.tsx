@@ -8,9 +8,9 @@ import { useUser } from '@clerk/nextjs'
 import ThemeToggle from '@/components/shared/ThemeToggle'
 
 const navLinks = [
-  { label: 'Features', href: '#features' },
-  { label: 'Platform', href: '#platform' },
-  { label: 'Intelligence', href: '#intelligence' },
+  { label: 'Features', href: '/#features' },
+  { label: 'Platform', href: '/#platform' },
+  { label: 'Intelligence', href: '/#intelligence' },
   { label: 'Pricing', href: '/pricing' },
 ]
 
