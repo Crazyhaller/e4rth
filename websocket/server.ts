@@ -20,7 +20,7 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env' })
 dotenv.config()
 
-const port = Number(process.env.WEBSOCKET_PORT ?? 4001)
+const port = Number(process.env.PORT || process.env.WEBSOCKET_PORT || 4001)
 const httpServer = createServer()
 
 // Strict CORS for Production
@@ -102,7 +102,7 @@ subscribeToRedis().catch((error) => {
   process.exit(1) // Kill the process if Redis fails to connect so the host can restart it
 })
 
-httpServer.listen(port, () => {
+httpServer.listen(port, '0.0.0.0', () => {
   console.log(`E4rth websocket server listening on port: ${port}`)
   console.log(`Allowing CORS for: ${allowedOrigins.join(', ')}`)
 })
