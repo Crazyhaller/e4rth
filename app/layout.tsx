@@ -4,8 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import ToastProvider from '@/components/providers/ToastProvider'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_APP_URL || 'https://my-e4rth.vercel.app/'
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://my-e4rth.vercel.app'
 
 const siteName = 'E4rth'
 
