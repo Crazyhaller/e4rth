@@ -71,7 +71,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: '/og-image.png',
+        url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
         alt: 'E4rth',
@@ -88,7 +88,14 @@ export const metadata: Metadata = {
 
     creator: '@e4rth',
 
-    images: ['/og-image.png'],
+    images: [
+      {
+        url: `${siteUrl}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'E4rth',
+      },
+    ],
   },
 
   robots: {
