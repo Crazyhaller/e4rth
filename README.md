@@ -1,36 +1,250 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌿 E4rth
 
-## Getting Started
+**Premium AI-powered plant intelligence platform**
+Diagnose plant diseases, generate care plans, track growth, and manage your botanical ecosystem with a modern, immersive SaaS experience.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Overview
+
+E4rth is a full-stack SaaS application designed to bring **AI-driven plant care** into a clean, production-grade web platform.
+
+It combines:
+
+- 🌱 AI plant diagnosis
+- 📊 growth & health analytics
+- 🧠 AI chatbot assistant
+- 🔔 real-time notifications
+- 📈 lifecycle tracking
+
+All wrapped in a **premium, nature-inspired UI** with scalable architecture.
+
+---
+
+## ✨ Core Features
+
+### 🧠 AI Plant Diagnosis
+
+- Upload plant images for instant analysis
+- Detect diseases with confidence scores
+- Get severity insights and treatment suggestions
+- Maintain scan history
+
+---
+
+### 🌿 Plant Management
+
+- Add and manage plants
+- Categorize with tags (Indoor, Outdoor, etc.)
+- Detailed plant profiles with lifecycle tracking
+
+---
+
+### 🌱 AI Care Plans
+
+- AI-generated watering, sunlight, and fertilizer schedules
+- Dynamic updates based on plant condition
+
+---
+
+### 📊 Growth & Health Analytics
+
+- Track height, leaf count, and health scores
+- Visualize trends using interactive charts
+- Analyze plant health over time
+
+---
+
+### 🧾 Timeline & History
+
+- Maintain plant logs and progress
+- Visual timeline of growth and recovery
+
+---
+
+### 💬 AI Chat Assistant
+
+- Ask plant-related questions
+- Context-aware responses based on your plants
+- Markdown-rendered responses with structured answers
+
+---
+
+### 🔔 Notifications System
+
+- Care reminders
+- Disease alerts
+- Real-time updates (WebSocket-ready)
+
+---
+
+### ⚡ Performance & UX
+
+- Smooth animations with Framer Motion
+- Glassmorphism UI with botanical design
+- Responsive and mobile-friendly
+- Optimized data fetching via hooks/services
+
+---
+
+## 🧱 Tech Stack
+
+### Frontend
+
+- **Next.js (App Router)**
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Motion**
+- **Chart.js**
+
+### Backend
+
+- **Next.js Route Handlers**
+- **Drizzle ORM**
+- **PostgreSQL via Neon**
+- **Clerk Authentication**
+- **Cloudinary**
+
+### AI & Realtime
+
+- **Google Gemini API**
+- **Redis (Upstash)**
+- **WebSockets (Socket.io)**
+
+---
+
+## 🏗️ Architecture
+
+E4rth follows a **clean, scalable layered architecture**:
+
+```txt
+Frontend Component
+   ↓
+Hook
+   ↓
+Frontend Service
+   ↓
+API Route
+   ↓
+Server Service Layer
+   ↓
+Repository Layer
+   ↓
+Database
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Principles
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Separation of concerns
+- Strong typing across layers
+- Reusable services & hooks
+- Minimal business logic in UI
+- Modular feature-based structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ⚙️ Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+Create a `.env` file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+# GEMINI
+GEMINI_API_KEY=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# CLERK
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+CLERK_WEBHOOK_SECRET=
 
-## Deploy on Vercel
+# DATABASE
+DATABASE_URL=
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# WEBSOCKET
+WEBSOCKET_PORT=4001
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# REDIS
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+REDIS_URL=
+
+# STRIPE
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# CLOUDINARY
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_CLOUD_NAME=
+
+# NEXT APP
+NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_WS_URL=
+```
+
+---
+
+## 🧪 Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Run Websocket
+npm run websocket
+```
+
+---
+
+## 🌍 Deployment
+
+Recommended:
+
+- **Vercel** for Main App
+- **Render / Railway** for WebSocket
+
+---
+
+## 🧠 Design Philosophy
+
+E4rth is designed to feel like:
+
+- 🌿 calm & nature-first
+- ✨ premium SaaS
+- 🧠 intelligent and responsive
+- 🎯 highly usable and polished
+
+---
+
+## 🔮 Roadmap
+
+- [ ] Activate Stripe subscription system
+- [ ] AI response streaming
+- [ ] Advanced analytics insights
+- [ ] Mobile app version
+- [ ] Multi-user plant sharing
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+## 👨‍💻 Author
+
+Built by a full-stack developer focused on:
+
+- modern frontend systems
+- scalable architecture
+- premium UI/UX
+
+---
+
+## ⭐ If you like this project
+
+Give it a star ⭐ — it helps a lot!
