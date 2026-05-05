@@ -42,22 +42,37 @@ export async function analyzePlantImage(
   const { base64Data, mimeType } = await getImagePayload(imageUrl)
 
   const prompt = `
-You are a plant disease detection AI.
+You are an expert-level plant pathology AI trained to analyze plant images with high accuracy.
 
-Analyze the plant image and return STRICT JSON in this format:
+Your task is to carefully examine the provided plant image and identify visible signs of disease, stress, or health.
+
+Return STRICT JSON ONLY in the following format:
 
 {
-  "disease": "name or healthy",
+  "disease": "specific disease name or 'healthy'",
   "confidence": number (0-100),
   "severity": "low" | "medium" | "high",
-  "treatment": ["step 1", "step 2", "step 3"]
+  "treatment": ["clear actionable step 1", "step 2", "step 3"],
 }
 
-Rules:
-- If plant is healthy → disease = "healthy"
-- Confidence must be realistic
-- Keep treatment practical and concise
-- DO NOT return anything except JSON
+Strict Rules:
+- DO NOT return anything except valid JSON
+- DO NOT include markdown, comments, or explanations
+- "disease" must be specific if identifiable (e.g., "powdery mildew", "leaf spot", "root rot"); otherwise use "unknown issue"
+- If no visible issues → set "disease" to "healthy" and "severity" to "low"
+- "confidence" must reflect visual certainty (avoid always using high values)
+- Base conclusions ONLY on visible evidence (leaf color, spots, wilting, mold, discoloration, damage patterns)
+- Do NOT hallucinate unseen conditions (e.g., root rot if roots are not visible unless strongly inferred)
+- "severity":
+  - low → minor or early-stage symptoms
+  - medium → noticeable spread or impact
+  - high → severe damage, widespread infection, or plant near death
+- "symptoms" must describe visible observations, not conclusions
+- "causes" should include environmental or biological reasons (e.g., overwatering, fungal infection, pests)
+- "treatment" must be practical, step-by-step, and immediately actionable
+- "prevention" should help avoid recurrence
+
+Be precise, conservative, and realistic in diagnosis.
 `
 
   try {
@@ -161,27 +176,37 @@ export async function generateCarePlan({
   }
 
   const prompt = `
-You are a plant care expert.
+You are an expert-level plant care specialist with deep knowledge of indoor and outdoor plant maintenance.
 
-Generate a care plan for the plant below.
+Generate a highly practical, realistic care plan for the plant below based on its species and general plant care best practices.
 
 Plant Name: ${plantName}
 Species: ${species ?? 'Unknown'}
 
-Return STRICT JSON in this format:
+Return STRICT JSON ONLY in the following format:
 
 {
   "wateringFrequency": number (days),
-  "sunlight": "description",
-  "fertilizer": "description",
-  "notes": "extra care tips"
+  "sunlight": "clear and specific light requirement",
+  "fertilizer": "type, frequency, and usage guidance",
+  "notes": "practical care tips and common mistakes to avoid"
 }
 
-Rules:
-- Watering frequency should be realistic (in days)
-- Keep sunlight and fertilizer concise
-- Notes should be practical and helpful
-- DO NOT return anything except JSON
+Strict Rules:
+- DO NOT return anything except valid JSON
+- DO NOT include markdown, comments, or explanations
+- If species is unknown, infer care based on common characteristics of similar houseplants
+- "wateringFrequency" must be realistic and depend on typical plant needs (avoid fixed/generic values)
+- "sunlight" must clearly specify intensity (e.g., "bright indirect light", "partial shade", "full sun")
+- "fertilizer" should include both type (e.g., liquid, balanced NPK) and frequency (e.g., every 2 weeks)
+- "humidity" must reflect plant preference accurately
+- "temperature" should be a realistic indoor/outdoor range (e.g., "18–26°C")
+- "soil" must describe drainage and composition if relevant (e.g., "well-draining, peat-based mix")
+- "notes" should include actionable advice (e.g., overwatering risks, seasonal adjustments, pruning tips)
+- Avoid vague phrases like "water regularly" or "keep in sunlight"
+- Be specific, practical, and tailored to the plant
+
+Ensure the output is useful for real-world plant care, not generic advice.
 `
 
   try {
